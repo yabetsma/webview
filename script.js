@@ -3,10 +3,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (joinButton) {
         joinButton.addEventListener("click", async function() {
-            const userId = document.getElementById("userId").value;
-            const chatId = document.getElementById("chatId").value;
-            const channelUsername = document.getElementById("channelUsername").value;
-            const giveawayId = document.getElementById("giveawayId").value;
+            const userIdElement = document.getElementById("userId");
+            const chatIdElement = document.getElementById("chatId");
+            const channelUsernameElement = document.getElementById("channelUsername");
+            const giveawayIdElement = document.getElementById("giveawayId");
+
+            // Check if all elements exist before proceeding
+            if (!userIdElement || !chatIdElement || !channelUsernameElement || !giveawayIdElement) {
+                console.error("One or more elements are missing!");
+                return;
+            }
+
+            const userId = userIdElement.value;
+            const chatId = chatIdElement.value;
+            const channelUsername = channelUsernameElement.value;
+            const giveawayId = giveawayIdElement.value;
 
             const data = {
                 user_id: userId,
