@@ -1,10 +1,7 @@
-document.getElementById('joinButton').addEventListener('click', async function() {
-    // Extract parameters from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user_id');
-    const chatId = urlParams.get('chat_id');
-    const channelUsername = urlParams.get('channel');
-    const giveawayId = urlParams.get('giveaway_id');
+async function handleGiveawayButtonClick() {
+    const userId = getUserId();  // Replace with actual method to get user ID
+    const channelUsername = getChannelUsername();  // Replace with actual method to get channel username
+    const giveawayId = getGiveawayId();  // Replace with actual method to get giveaway ID
 
     try {
         const response = await fetch('http://localhost:5000/check_membership', {
@@ -14,31 +11,38 @@ document.getElementById('joinButton').addEventListener('click', async function()
             },
             body: JSON.stringify({
                 user_id: userId,
-                chat_id: chatId,
                 channel_username: channelUsername,
-                giveaway_id: giveawayId
-            })
+                giveaway_id: giveawayId,
+            }),
         });
 
         const result = await response.json();
 
         if (result.status === 'success') {
-            if (result.is_member) {
-                document.getElementById('statusMessage').textContent = result.message;
-            } else {
-                document.getElementById('statusMessage').innerHTML = `
-                    ${result.message} <br>
-                    ${result.join_links}
-                `;
-            }
+            alert(result.message);
         } else {
-            document.getElementById('statusMessage').textContent = result.message;
+            alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById('statusMessage').textContent = 'An error occurred. Please try again.';
+        alert('An error occurred. Please try again.');
     }
-});
+}
+
+function getUserId() {
+    // Implement your logic to get the user ID
+}
+
+function getChannelUsername() {
+    // Implement your logic to get the channel username
+}
+
+function getGiveawayId() {
+    // Implement your logic to get the giveaway ID
+}
+
+document.querySelector('#giveaway-button').addEventListener('click', handleGiveawayButtonClick);
+
 
 
 
