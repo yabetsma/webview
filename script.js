@@ -1,31 +1,26 @@
-document.getElementById('joinButton').addEventListener('click', () => {
-    const statusMessage = document.getElementById('statusMessage');
+document.getElementById('joinButton').addEventListener('click', function() {
+    const userId = /* obtain user ID */;
+    const channelUsername = /* obtain channel username */;
+    const chatId = /* obtain chat ID */;
 
-    // Fetch user ID and channel username from URL parameters or other means
-    const userId = 'YOUR_USER_ID';  // Replace with actual user ID
-    const channelUsername = 'YOUR_CHANNEL_USERNAME';  // Replace with actual channel username
-    const chatId = 'YOUR_CHAT_ID';  // Replace with actual chat ID
-
-    fetch('http://localhost:5000/check_membership', {  // Change to your Flask server URL
+    fetch('https://your-deployed-flask-url.com/check_membership', {  // Update with your deployed Flask URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ user_id: userId, channel_username: channelUsername, chat_id: chatId })
     })
-    .then(response => {
-        if (response.ok) {
-            statusMessage.textContent = "Congratulations! You are now part of the giveaway!";
-            statusMessage.style.color = 'green';
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('statusMessage').innerText = 'You are a member!';
         } else {
-            statusMessage.textContent = "You need to join the channel first to participate in the giveaway.";
-            statusMessage.style.color = 'red';
+            document.getElementById('statusMessage').innerText = 'Failed to check membership.';
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        statusMessage.textContent = "An error occurred. Please try again.";
-        statusMessage.style.color = 'red';
+        document.getElementById('statusMessage').innerText = 'An error occurred. Please try again.';
     });
 });
 
