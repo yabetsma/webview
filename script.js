@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const joinButton = document.getElementById("joinGiveaway");
+    const joinButton = document.getElementById("joinButton");
+    const statusMessage = document.getElementById("statusMessage");
 
     if (joinButton) {
         joinButton.addEventListener("click", async function() {
@@ -10,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Check if all elements exist before proceeding
             if (!userIdElement || !chatIdElement || !channelUsernameElement || !giveawayIdElement) {
-                console.error("One or more elements are missing!");
+                statusMessage.textContent = "An error occurred. Please try again.";
+                statusMessage.className = "status-message error";
                 return;
             }
 
@@ -38,20 +40,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    alert(result.message);
-                    // Optionally redirect to another page or update UI
+                    statusMessage.textContent = result.message;
+                    statusMessage.className = "status-message success";
                 } else {
-                    alert(result.message);
+                    statusMessage.textContent = result.message;
+                    statusMessage.className = "status-message error";
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("An error occurred. Please try again.");
+                statusMessage.textContent = "An error occurred. Please try again.";
+                statusMessage.className = "status-message error";
             }
         });
     } else {
         console.error("Join Giveaway button not found!");
     }
 });
+
 
 
 
