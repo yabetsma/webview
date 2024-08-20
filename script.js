@@ -26,10 +26,9 @@ document.getElementById('joinButton').addEventListener('click', async function()
             if (result.is_member) {
                 document.getElementById('statusMessage').textContent = result.message;
             } else {
-                // Provide a button to join the channel
                 document.getElementById('statusMessage').innerHTML = `
                     ${result.message} <br>
-                    <a href="${result.join_link}" target="_blank" class="join-channel-button">Join the Channel</a>
+                    ${result.join_links}
                 `;
             }
         } else {
@@ -40,5 +39,6 @@ document.getElementById('joinButton').addEventListener('click', async function()
         document.getElementById('statusMessage').textContent = 'An error occurred. Please try again.';
     }
 });
+
 
 
