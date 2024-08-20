@@ -1,47 +1,49 @@
-async function handleGiveawayButtonClick() {
-    const userId = getUserId();  // Replace with actual method to get user ID
-    const channelUsername = getChannelUsername();  // Replace with actual method to get channel username
-    const giveawayId = getGiveawayId();  // Replace with actual method to get giveaway ID
+document.addEventListener("DOMContentLoaded", function() {
+    const joinButton = document.getElementById("joinGiveaway");
 
-    try {
-        const response = await fetch('http://localhost:5000/check_membership', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+    if (joinButton) {
+        joinButton.addEventListener("click", async function() {
+            const userId = document.getElementById("userId").value;
+            const chatId = document.getElementById("chatId").value;
+            const channelUsername = document.getElementById("channelUsername").value;
+            const giveawayId = document.getElementById("giveawayId").value;
+
+            const data = {
                 user_id: userId,
+                chat_id: chatId,
                 channel_username: channelUsername,
-                giveaway_id: giveawayId,
-            }),
+                giveaway_id: giveawayId
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/check_membership", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    alert(result.message);
+                    // Optionally redirect to another page or update UI
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            }
         });
-
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            alert(result.message);
-        } else {
-            alert(result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
+    } else {
+        console.error("Join Giveaway button not found!");
     }
-}
+});
 
-function getUserId() {
-    // Implement your logic to get the user ID
-}
-
-function getChannelUsername() {
-    // Implement your logic to get the channel username
-}
-
-function getGiveawayId() {
-    // Implement your logic to get the giveaway ID
-}
-
-document.querySelector('#giveaway-button').addEventListener('click', handleGiveawayButtonClick);
+    }
+});
 
 
 
