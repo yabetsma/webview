@@ -7,7 +7,6 @@ document.getElementById('joinButton').addEventListener('click', async function()
     const giveawayId = urlParams.get('giveaway_id');
 
     try {
-        // Fetch request to the backend
         const response = await fetch('http://localhost:5000/check_membership', {
             method: 'POST',
             headers: {
@@ -21,17 +20,22 @@ document.getElementById('joinButton').addEventListener('click', async function()
             })
         });
 
-        // Parse JSON response
         const result = await response.json();
 
-        // Handle success or failure
         if (result.status === 'success') {
-            document.getElementById('statusMessage').textContent = result.message;
+            if (result.is_member) {
+                document.getElementById('statusMessage').textContent = result.message;
+            } else {
+                // Provide a button to join the channel
+                document.getElementById('statusMessage').innerHTML = `
+                    ${result.message} <br>
+                    <a href="${result.join_link}" target="_blank" class="join-channel-button">Join the Channel</a>
+                `;
+            }
         } else {
             document.getElementById('statusMessage').textContent = result.message;
         }
     } catch (error) {
-        // Handle errors
         console.error('Error:', error);
         document.getElementById('statusMessage').textContent = 'An error occurred. Please try again.';
     }
