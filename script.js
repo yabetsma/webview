@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/join_giveaway', {
+                const response = await fetch('https://dc14-169-150-196-139.ngrok-free.app', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
