@@ -1,45 +1,36 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const joinButton = document.getElementById('joinButton');
-    const statusMessage = document.getElementById('statusMessage');
+document.getElementById('joinButton').addEventListener('click', async () => {
+    const tg = window.Telegram.WebApp; // Access the Telegram WebApp API
 
-    // Ensure that Telegram WebApp is defined
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+    if (!tg.initData || !tg.initDataUnsafe) {
+        document.getElementById('statusMessage').innerText = "Error: Cannot retrieve Telegram data.";
+        return;
+    }
 
-        joinButton.addEventListener('click', async function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const channel = urlParams.get('channel');
-            const giveawayId = urlParams.get('giveaway_id');
-
-            try {
-                const response = await fetch('https://your-backend-url/check_membership', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        channel: channel,
-                        giveaway_id: giveawayId,
-                    }),
-                });
-
-                const result = await response.json();
-                if (result.status === 'success') {
-                    statusMessage.textContent = result.message;
-                    statusMessage.style.color = 'green';
-                } else {
-                    statusMessage.textContent = result.message;
-                    statusMessage.style.color = 'red';
-                }
-            } catch (error) {
-                statusMessage.textContent = 'An error occurred. Please try again later.';
-                statusMessage.style.color = 'red';
-            }
+    const user_id = tg.initDataUnsafe.user.id; // Get the Telegram User ID
+    const chat_id = new URLSearchParams(window.location.search).get('start').split('gid=')[1]; // Get giveaway ID from URL
+    
+    // Send user and giveaway information to the backend
+    try {
+        const response = await fetch('https://your-backend-url.com/join', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                giveaway_id: chat_id
+            })
         });
-    } else {
-        statusMessage.textContent = 'This page must be loaded within the Telegram app.';
-        statusMessage.style.color = 'red';
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('statusMessage').innerText = "You have successfully joined the giveaway!";
+        } else {
+            document.getElementById('statusMessage').innerText = "Error joining giveaway: " + result.message;
+        }
+    } catch (error) {
+        document.getElementById('statusMessage').innerText = "Network error. Please try again later.";
     }
 });
 
