@@ -1,14 +1,7 @@
-/* Basic reset to remove default margins/padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,72 +9,42 @@ body {
 }
 
 .container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    text-align: center;
+    background-color: #fff;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .giveaway-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-}
-
-.giveaway-card h1 {
-    font-size: 1.8rem;
     margin-bottom: 20px;
-    color: #ff6f61;
 }
 
-.giveaway-card p {
-    font-size: 1rem;
-    margin-bottom: 20px;
-    color: #555;
+h1 {
+    color: #333;
+    margin-bottom: 10px;
 }
 
-#joinButton {
-    background-color: #ff6f61;
-    color: #fff;
+p {
+    color: #777;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
 }
 
-#joinButton:hover {
-    background-color: #e65b50;
+button:hover {
+    background-color: #0056b3;
 }
 
 .status-message {
     margin-top: 20px;
-    font-size: 1rem;
-    color: #555;
-}
-
-.status-message.success {
-    color: #28a745;
-}
-
-.status-message.error {
-    color: #dc3545;
-}
-
-.join-channel-button {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 1em;
-}
-
-.join-channel-button:hover {
-    background-color: #0056b3;
+    font-size: 14px;
 }
 
