@@ -1,61 +1,41 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const joinButton = document.getElementById("joinButton");
-    const statusMessage = document.getElementById("statusMessage");
+document.addEventListener('DOMContentLoaded', function () {
+    const joinButton = document.getElementById('joinButton');
+    const statusMessage = document.getElementById('statusMessage');
 
-    if (joinButton) {
-        joinButton.addEventListener("click", async function() {
-            const userIdElement = document.getElementById("userId");
-            const chatIdElement = document.getElementById("chatId");
-            const channelUsernameElement = document.getElementById("channelUsername");
-            const giveawayIdElement = document.getElementById("giveawayId");
+    joinButton.addEventListener('click', async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        const channel = urlParams.get('channel');
+        const giveawayId = urlParams.get('giveaway_id');
 
-            // Check if all elements exist before proceeding
-            if (!userIdElement || !chatIdElement || !channelUsernameElement || !giveawayIdElement) {
-                statusMessage.textContent = "An error occurred. Please try again.";
-                statusMessage.className = "status-message error";
-                return;
+        try {
+            const response = await fetch('http://localhost:5000/check_membership', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    channel: channel,
+                    giveaway_id: giveawayId,
+                }),
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                statusMessage.textContent = result.message;
+                statusMessage.style.color = 'green';
+            } else {
+                statusMessage.textContent = result.message;
+                statusMessage.style.color = 'red';
             }
-
-            const userId = userIdElement.value;
-            const chatId = chatIdElement.value;
-            const channelUsername = channelUsernameElement.value;
-            const giveawayId = giveawayIdElement.value;
-
-            const data = {
-                user_id: userId,
-                chat_id: chatId,
-                channel_username: channelUsername,
-                giveaway_id: giveawayId
-            };
-
-            try {
-                const response = await fetch("http://localhost:5000/check_membership", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (result.status === "success") {
-                    statusMessage.textContent = result.message;
-                    statusMessage.className = "status-message success";
-                } else {
-                    statusMessage.textContent = result.message;
-                    statusMessage.className = "status-message error";
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                statusMessage.textContent = "An error occurred. Please try again.";
-                statusMessage.className = "status-message error";
-            }
-        });
-    } else {
-        console.error("Join Giveaway button not found!");
-    }
+        } catch (error) {
+            statusMessage.textContent = 'An error occurred. Please try again later.';
+            statusMessage.style.color = 'red';
+        }
+    });
 });
+
 
 
 
