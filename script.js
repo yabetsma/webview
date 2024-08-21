@@ -1,26 +1,44 @@
-document.getElementById('joinButton').addEventListener('click', async () => {
-    const tg = window.Telegram.WebApp; // Access the Telegram WebApp API
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.Telegram && window.Telegram.WebApp) {
+        const telegramWebApp = window.Telegram.WebApp;
 
-    if (!tg.initData || !tg.initDataUnsafe) {
-        document.getElementById('statusMessage').innerText = "Error: Cannot retrieve Telegram data.";
-        return;
-    }
-
-    const user_id = tg.initDataUnsafe.user.id; // Get the Telegram User ID
-    const chat_id = new URLSearchParams(window.location.search).get('start').split('gid=')[1]; // Get giveaway ID from URL
-    
-    // Send user and giveaway information to the backend
-    try {
-        const response = await fetch('https://your-backend-url.com/join', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user_id: user_id,
-                giveaway_id: chat_id
-            })
+        document.getElementById("joinButton").addEventListener("click", function() {
+            const userId = telegramWebApp.initDataUnsafe.user.id;
+            const giveawayId = 1; // Example giveaway ID
+            joinGiveaway(userId, giveawayId);
         });
+
+    } else {
+        console.error("Telegram WebApp is not available");
+    }
+});
+
+function joinGiveaway(userId, giveawayId) {
+    fetch('/check_membership', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            giveaway_id: giveawayId,
+            channel: 'example_channel'  // Replace with your actual channel name
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const statusMessage = document.getElementById('statusMessage');
+        if (data.status === 'success') {
+            statusMessage.textContent = "You have successfully joined the giveaway!";
+        } else {
+            statusMessage.textContent = data.message;
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
         
         const result = await response.json();
         
