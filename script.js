@@ -1,46 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Telegram WebApp
-    if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.init();
+    const joinButton = document.getElementById('joinButton');
+    const statusMessage = document.getElementById('statusMessage');
+    const joinChannelButton = document.getElementById('joinChannelButton');
 
-        // Get user and giveaway information
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        const user_id = user.id;
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const giveaway_id = urlParams.get('giveaway_id');
+    if (window.Telegram.WebApp) {
+        const user = window.Telegram.WebApp.initDataUnsafe;
 
-        // Add event listener for the button click
-        document.getElementById('joinButton').addEventListener('click', async () => {
-            if (!giveaway_id) {
-                console.error("Giveaway ID is missing.");
-                return;
-            }
+        if (!user.user) {
+            // User data not available, hide buttons
+            joinButton.style.display = 'none';
+            statusMessage.textContent = 'User information not available.';
+            return;
+        }
 
+        const userId = user.user.id;
+        const queryParams = new URLSearchParams(window.location.search);
+        const giveawayId = queryParams.get('giveaway_id');
+
+        joinButton.addEventListener('click', async () => {
             try {
-                const response = await fetch('https://dc14-169-150-196-139.ngrok-free.app', {
+                const response = await fetch('https://dc14-169-150-196-139.ngrok-free.app/check_membership', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ user_id, giveaway_id })
+                    body: JSON.stringify({
+                        user_id: userId,
+                        giveaway_id: giveawayId
+                    })
                 });
 
-                const result = await response.json();
-                if (result.status === 'success') {
-                    document.getElementById('statusMessage').textContent = result.message;
-                    document.getElementById('joinButton').style.display = 'none';
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusMessage.textContent = data.message || 'Successfully joined the giveaway!';
+                    joinButton.style.display = 'none';
                 } else {
-                    document.getElementById('statusMessage').textContent = result.message;
-                    document.getElementById('joinButton').style.display = 'inline-block';
+                    statusMessage.textContent = data.message || 'Failed to join the giveaway.';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('statusMessage').textContent = "An error occurred. Please try again.";
+                statusMessage.textContent = 'An error occurred. Please try again later.';
             }
         });
     } else {
-        console.error("Telegram WebApp is not available");
+        statusMessage.textContent = 'Telegram WebApp not available.';
     }
 });
 
