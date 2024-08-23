@@ -1,33 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     const joinButton = document.getElementById('joinButton');
     const statusMessage = document.getElementById('statusMessage');
-    const joinChannelButton = document.getElementById('joinChannelButton');
 
     if (window.Telegram.WebApp) {
-        const user = window.Telegram.WebApp.initDataUnsafe;
+        const user = window.Telegram.WebApp.initDataUnsafe.user;
 
-        if (!user.user) {
-            // User data not available, hide buttons
+        if (!user) {
             joinButton.style.display = 'none';
             statusMessage.textContent = 'User information not available.';
             return;
         }
 
-        const userId = user.user.id;
+        const userId = user.id;
         const queryParams = new URLSearchParams(window.location.search);
         const giveawayId = queryParams.get('giveaway_id');
 
         joinButton.addEventListener('click', async () => {
             try {
-                const response = await fetch('https://dc14-169-150-196-139.ngrok-free.app/check_membership', {
+                const response = await fetch('https://d7fe-149-34-244-143.ngrok-free.app/check_membership', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        giveaway_id: giveawayId
-                    })
+                    body: JSON.stringify({ user_id: userId, giveaway_id: giveawayId })
                 });
 
                 const data = await response.json();
