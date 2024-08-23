@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         joinButton.addEventListener('click', async () => {
             try {
-                const response = await fetch('https://d7fe-149-34-244-143.ngrok-free.app/check_membership', {
+                const response = await fetch('https://fef0-149-34-244-142.ngrok-free.app/check_membership', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
