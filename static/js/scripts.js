@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
 
-            fetch('https://5d22-93-190-142-118.ngrok-free.app/create_giveaway', { // Replace with your ngrok URL
+            fetch('https://2cab-93-190-142-107.ngrok-free.app/create_giveaway', { // Replace with your ngrok URL
                 method: 'POST',
                 body: formData,
             })
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         announceWinnersButton.addEventListener('click', function() {
             const giveawayId = giveawayIdInput.value;
 
-            fetch(`https://5d22-93-190-142-118.ngrok-free.app/announce_winners/${giveawayId}`) // Replace with your ngrok URL
+            fetch(`https://2cab-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`) // Replace with your ngrok URL
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
