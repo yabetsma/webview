@@ -1,9 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const addChannelForm = document.getElementById('addChannelForm');  // Ensure this form ID matches your HTML
+    const addChannelForm = document.getElementById('addChannelForm');
     const createGiveawayForm = document.getElementById('createGiveawayForm');
-    const announceWinnersButton = document.getElementById('announceWinnersButton');
-    const giveawayIdInput = document.getElementById('giveawayId');
-    const resultsDiv = document.getElementById('resultsDiv');
+    const channelSelect = document.getElementById('channelSelect');
+    const channelMessage = document.getElementById('channelMessage');
+    const giveawayMessage = document.getElementById('giveawayMessage');
+    const giveawayForm = document.getElementById('giveawayForm');
+    const showGiveawayFormButton = document.getElementById('showGiveawayFormButton');
+
+    // Fetch channels and populate the dropdown
+    function fetchChannels() {
+        fetch('https://6d44-93-190-142-107.ngrok-free.app/channels') // Replace with your ngrok URL
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    channelSelect.innerHTML = '<option value="" disabled selected>Select a channel</option>';
+                    data.channels.forEach(channel => {
+                        const option = document.createElement('option');
+                        option.value = channel.username;
+                        option.textContent = channel.username;
+                        channelSelect.appendChild(option);
+                    });
+                } else {
+                    channelMessage.textContent = 'Failed to load channels: ' + data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                channelMessage.textContent = 'An error occurred: ' + error.message;
+            });
+    }
+
+    // Initial fetch of channels
+    fetchChannels();
 
     if (addChannelForm) {
         addChannelForm.addEventListener('submit', function(event) {
@@ -15,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData,
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded' // Ensure the content type matches the backend expected format
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
             .then(response => response.json())
@@ -23,13 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     alert(data.message);
                     addChannelForm.reset(); // Clear the form
+                    fetchChannels(); // Refresh the channel list
                 } else {
-                    alert('Failed to add channel: ' + data.message);
+                    channelMessage.textContent = 'Failed to add channel: ' + data.message;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred: ' + error.message);
+                channelMessage.textContent = 'An error occurred: ' + error.message;
             });
         });
     }
@@ -44,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData,
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded' // Ensure the content type matches the backend expected format
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
             .then(response => response.json())
@@ -53,38 +82,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert(data.message);
                     createGiveawayForm.reset(); // Clear the form
                 } else {
-                    alert('Failed to create giveaway: ' + data.message);
+                    giveawayMessage.textContent = 'Failed to create giveaway: ' + data.message;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred: ' + error.message);
+                giveawayMessage.textContent = 'An error occurred: ' + error.message;
             });
         });
     }
 
-    if (announceWinnersButton) {
-        announceWinnersButton.addEventListener('click', function() {
-            const giveawayId = giveawayIdInput.value;
-
-            fetch(`https://6d44-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`, { // Replace with your ngrok URL
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    resultsDiv.innerHTML = `<h2>Winners</h2><ul>${data.winners.map(winner => `<li>${winner.username}</li>`).join('')}</ul>`;
-                } else {
-                    alert('Failed to announce winners: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred: ' + error.message);
-            });
+    // Show/hide giveaway form
+    if (showGiveawayFormButton) {
+        showGiveawayFormButton.addEventListener('click', function() {
+            giveawayForm.style.display = giveawayForm.style.display === 'none' ? 'block' : 'none';
         });
     }
 });
+
