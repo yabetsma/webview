@@ -48,7 +48,7 @@
             margin-top: 30px;
             text-align: center;
         }
-        .form-container input, .form-container select {
+        .form-container input {
             padding: 10px;
             font-size: 1em;
             margin: 5px;
@@ -72,9 +72,6 @@
             margin-top: 20px;
             font-size: 1.1em;
         }
-        #giveawayForm {
-            display: none; /* Initially hide the giveaway form */
-        }
     </style>
 </head>
 <body>
@@ -83,7 +80,7 @@
         <h1>Welcome to the Giveaway Manager!</h1>
         <div class="buttons">
             <a href="./add_payment.html" class="button">Add Payment Method</a>
-            <a href="#" class="button" id="showGiveawayFormButton">Create Giveaway</a>
+            <a href="./create_giveaway.html" class="button">Create Giveaway</a>
         </div>
 
         <!-- Add Channel Form -->
@@ -94,23 +91,6 @@
                 <button type="submit">Add Channel</button>
             </form>
             <div id="channelMessage" class="message"></div>
-        </div>
-
-        <!-- Create Giveaway Form -->
-        <div id="giveawayForm" class="form-container">
-            <h2>Create Giveaway</h2>
-            <form id="createGiveawayForm">
-                <select id="channelSelect" name="channel" required>
-                    <option value="" disabled selected>Select a channel</option>
-                    <!-- Options will be populated dynamically by JavaScript -->
-                </select>
-                <input type="text" id="giveaway_name" name="giveaway_name" placeholder="Giveaway Name" required>
-                <input type="number" step="0.01" id="prize_amount" name="prize_amount" placeholder="Prize Amount" required>
-                <input type="number" id="participants_count" name="participants_count" placeholder="Participants Count" required>
-                <input type="datetime-local" id="end_date" name="end_date" required>
-                <button type="submit">Create Giveaway</button>
-            </form>
-            <div id="giveawayMessage" class="message"></div>
         </div>
     </div>
 
