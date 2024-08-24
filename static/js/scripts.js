@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             fetch('https://2cab-93-190-142-107.ngrok-free.app/create_giveaway', {
                 method: 'POST',
-                body: formData,
+                body: new URLSearchParams(formData).toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             })
             .then(response => response.json())
             .then(data => {
@@ -55,9 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
-            .then(response => response.text()) // Change to text if not using JSON
-            .then(text => {
-                alert(text);
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Channel added successfully!');
+                } else {
+                    alert(`Failed to add channel: ${data.message}`);
+                }
             })
             .catch(error => console.error('Error:', error));
         });
