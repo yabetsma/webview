@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             fetch('https://6d44-93-190-142-107.ngrok-free.app/add_channel', { // Replace with your ngrok URL
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded' // Ensure the content type matches the backend expected format
+                }
             })
             .then(response => response.json())
             .then(data => {
@@ -37,7 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             fetch('https://6d44-93-190-142-107.ngrok-free.app/create_giveaway', { // Replace with your ngrok URL
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded' // Ensure the content type matches the backend expected format
+                }
             })
             .then(response => response.json())
             .then(data => {
@@ -59,13 +67,18 @@ document.addEventListener('DOMContentLoaded', function() {
         announceWinnersButton.addEventListener('click', function() {
             const giveawayId = giveawayIdInput.value;
 
-            fetch(`https://6d44-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`) // Replace with your ngrok URL
+            fetch(`https://6d44-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`, { // Replace with your ngrok URL
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     resultsDiv.innerHTML = `<h2>Winners</h2><ul>${data.winners.map(winner => `<li>${winner.username}</li>`).join('')}</ul>`;
                 } else {
-                    alert('Failed to announce winners.');
+                    alert('Failed to announce winners: ' + data.message);
                 }
             })
             .catch(error => {
