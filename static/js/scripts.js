@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
 
-            fetch('https://2cab-93-190-142-107.ngrok-free.app/create_giveaway', {
+            fetch('https://1e92-93-190-142-107.ngrok-free.app/create_giveaway', {
                 method: 'POST',
                 body: new URLSearchParams(formData).toString(),
                 headers: {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         announceWinnersButton.addEventListener('click', function() {
             const giveawayId = giveawayIdInput.value;
 
-            fetch(`https://2cab-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`)
+            fetch(`https://1e92-93-190-142-107.ngrok-free.app/announce_winners/${giveawayId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
 
-            fetch('https://2cab-93-190-142-107.ngrok-free.app/add_channel', {
+            fetch('https://1e92-93-190-142-107.ngrok-free.app/add_channel', {
                 method: 'POST',
                 body: new URLSearchParams(formData).toString(),
                 headers: {
