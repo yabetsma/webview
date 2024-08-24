@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         createGiveawayButton.addEventListener('click', function() {
             createGiveawayFormContainer.classList.toggle('hidden');
             if (!createGiveawayFormContainer.classList.contains('hidden')) {
-                populateChannelDropdown();
+                populateChannelDropdown(); // Populate dropdown when showing form
             }
         });
     }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('https://6d44-93-190-142-107.ngrok-free.app/get_channels') // Replace with your ngrok URL
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data && Array.isArray(data.channels)) {
                 channelSelect.innerHTML = '<option value="">Select a channel</option>';
                 data.channels.forEach(channel => {
                     const option = document.createElement('option');
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initial population of the channel dropdown if needed
+    // Initial population of the channel dropdown if the form is visible
     if (createGiveawayFormContainer && !createGiveawayFormContainer.classList.contains('hidden')) {
         populateChannelDropdown();
     }
