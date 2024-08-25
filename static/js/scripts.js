@@ -22,11 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     channelMessage.textContent = 'Channel added successfully!';
-                    addChannelForm.reset(); // Clear the form
+                    addChannelForm.reset();
                 } else {
                     channelMessage.textContent = 'Failed to add channel: ' + data.message;
                 }
