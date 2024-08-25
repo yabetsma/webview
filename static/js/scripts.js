@@ -2,7 +2,7 @@
 function getTelegramUserId() {
     return new Promise((resolve) => {
         // Check if Telegram Web App is available
-        if (window.Telegram.WebApp) {
+        if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
             resolve(userId);
@@ -16,13 +16,16 @@ function getTelegramUserId() {
 // Fetch channels and populate the select dropdown
 async function fetchChannels() {
     try {
-        const response = await fetch('https://backend1-production-29e4.up.railway.app/get_channels?creator_id=YOUR_CREATOR_ID'); // Ensure creator_id is correctly set
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Get the creator ID from Telegram Web App
+        const creatorId = await getTelegramUserId();
+        if (!creatorId) {
+            throw new Error('Unable to get user ID from Telegram.');
         }
 
+        // Fetch channels using the creator ID
+        const response = await fetch(`https://backend1-production-29e4.up.railway.app/get_channels?creator_id=${creatorId}`);
         const data = await response.json();
-        
+
         if (data.success) {
             const channels = data.channels;
             const channelSelect = document.getElementById('channel');
@@ -41,13 +44,10 @@ async function fetchChannels() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', fetchChannels);
-
-
 // Handle form submission for adding a channel
 async function addChannel(event) {
     event.preventDefault();
-    
+
     const username = document.getElementById('channel_username').value;
 
     // Get the creator ID from Telegram Web App
@@ -67,7 +67,7 @@ async function addChannel(event) {
             body: JSON.stringify({ username, creator_id: creatorId })
         });
         const data = await response.json();
-        
+
         if (data.success) {
             alert('Channel added successfully!');
         } else {
@@ -81,7 +81,7 @@ async function addChannel(event) {
 // Handle form submission for creating a giveaway
 async function createGiveaway(event) {
     event.preventDefault();
-    
+
     const giveawayName = document.getElementById('giveaway_name').value;
     const prizeAmount = document.getElementById('prize_amount').value;
     const participantsCount = document.getElementById('participants_count').value;
@@ -105,7 +105,7 @@ async function createGiveaway(event) {
             body: JSON.stringify({ name: giveawayName, prize_amount: prizeAmount, participants_count: participantsCount, end_date: endDate, channel_id: channelId, creator_id: creatorId })
         });
         const data = await response.json();
-        
+
         if (data.success) {
             alert('Giveaway created successfully!');
         } else {
@@ -116,20 +116,9 @@ async function createGiveaway(event) {
     }
 }
 
-// Ensure the DOM is fully loaded before adding event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Event listeners
-    const addChannelForm = document.getElementById('add_channel_form');
-    const createGiveawayForm = document.getElementById('create_giveaway_form');
+// Event listeners
+document.getElementById('add_channel_form').addEventListener('submit', addChannel);
+document.getElementById('create_giveaway_form').addEventListener('submit', createGiveaway);
 
-    if (addChannelForm) {
-        addChannelForm.addEventListener('submit', addChannel);
-    }
-
-    if (createGiveawayForm) {
-        createGiveawayForm.addEventListener('submit', createGiveaway);
-    }
-
-    // Fetch channels on page load
-    fetchChannels();
-});
+// Fetch channels on page load
+document.addEventListener('DOMContentLoaded', fetchChannels);
