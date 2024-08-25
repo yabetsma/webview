@@ -19,8 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Accept': 'application/json',
-                    'Access-Control-Allow-Origin': 'https://eyob2one.github.io/giveaway-webview/'
+                    'Accept': 'application/json'
                 }
             })
             .then(response => response.json())
@@ -36,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
                 channelMessage.textContent = 'An error occurred: ' + error.message;
             });
+            
         });
     }
 
