@@ -17,10 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`${backendUrl}/add_channel`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
-                    "Access-Control-Allow-Headers" : "Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                    'Accept': 'application/json'
                 },
                 body: formData
             })
@@ -102,3 +99,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Call reloadChannels when the DOM is fully loaded
     reloadChannels();
 });
+
