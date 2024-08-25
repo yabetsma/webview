@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const backendUrl = 'https://backend1-production-29e4.up.railway.app';
 
-    // Handle Add Channel Form
+    // Ensure the element exists before adding an event listener
     if (addChannelForm) {
         addChannelForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -26,8 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 channelMessage.textContent = data.message;
                 if (data.success) {
                     channelMessage.style.color = 'green';
-                    // Reload channels in the select list
-                    reloadChannels();
+                    reloadChannels(); // Reload channels list
                 } else {
                     channelMessage.style.color = 'red';
                 }
@@ -39,12 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle Create Giveaway Button click
-    createGiveawayButton.addEventListener('click', function() {
-        createGiveawayFormContainer.style.display = 'block';
-    });
+    if (createGiveawayButton && createGiveawayFormContainer) {
+        createGiveawayButton.addEventListener('click', function() {
+            createGiveawayFormContainer.style.display = 'block';
+        });
+    }
 
-    // Handle Create Giveaway Form
     if (createGiveawayForm) {
         createGiveawayForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -72,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Reload channels list
+    // Function to reload channels list
     function reloadChannels() {
         fetch(`${backendUrl}/`, {
             method: 'GET',
@@ -82,19 +81,22 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            channelSelect.innerHTML = '';
-            data.channels.forEach(channel => {
-                const option = document.createElement('option');
-                option.value = channel.username;
-                option.textContent = channel.username;
-                channelSelect.appendChild(option);
-            });
+            if (channelSelect) {
+                channelSelect.innerHTML = '';
+                data.channels.forEach(channel => {
+                    const option = document.createElement('option');
+                    option.value = channel.username;
+                    option.textContent = channel.username;
+                    channelSelect.appendChild(option);
+                });
+            }
         })
         .catch(error => {
             console.error('Error loading channels:', error);
         });
     }
 
+    // Call reloadChannels when the DOM is fully loaded
     reloadChannels();
 });
 
