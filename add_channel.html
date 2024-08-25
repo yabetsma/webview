@@ -58,6 +58,19 @@
         .button:hover {
             background-color: #4834d4;
         }
+        .message {
+        margin-top: 10px;
+        font-size: 14px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
     </style>
 </head>
 <body>
@@ -65,7 +78,7 @@
         <h1>Add Channel</h1>
     </header>
     <main class="container">
-        <form id="create_giveaway_form">
+        <form id="add_channel_form">
             <div class="form-group">
                 <label for="channel_username">Channel Username</label>
                 <input type="text" id="channel_username" name="channel_username" required>
@@ -74,7 +87,8 @@
             <button type="submit" class="button">Add Channel</button>
             <div id="channelMessage" class="message"></div>
         </form>
-    </main>    
+    </main>
+    
     <script src="static/js/add_channel.js"></script>
     <script src="static/js/common.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
