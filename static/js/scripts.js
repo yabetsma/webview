@@ -109,9 +109,20 @@ async function createGiveaway(event) {
     }
 }
 
-// Event listeners
-document.getElementById('add_channel_form').addEventListener('submit', addChannel);
-document.getElementById('create_giveaway_form').addEventListener('submit', createGiveaway);
+// Ensure the DOM is fully loaded before adding event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Event listeners
+    const addChannelForm = document.getElementById('add_channel_form');
+    const createGiveawayForm = document.getElementById('create_giveaway_form');
 
-// Fetch channels on page load
-document.addEventListener('DOMContentLoaded', fetchChannels);
+    if (addChannelForm) {
+        addChannelForm.addEventListener('submit', addChannel);
+    }
+
+    if (createGiveawayForm) {
+        createGiveawayForm.addEventListener('submit', createGiveaway);
+    }
+
+    // Fetch channels on page load
+    fetchChannels();
+});
