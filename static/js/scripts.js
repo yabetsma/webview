@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
 
-            fetch(`${backendUrl}/add_channel`, { // Use your backend URL
+            fetch(`${backendUrl}/add_channel`, {
                 method: 'POST',
-                body: new URLSearchParams(formData),
+                body: formData,
                 headers: {
                     'Accept': 'application/json'
                 }
@@ -54,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
 
-            fetch(`${backendUrl}/create_giveaway`, { // Use your backend URL
+            fetch(`${backendUrl}/create_giveaway`, {
                 method: 'POST',
-                body: new URLSearchParams(formData)
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to populate the channel dropdown
     function populateChannelDropdown() {
-        fetch(`${backendUrl}/get_channels`) // Use your backend URL
+        fetch(`${backendUrl}/get_channels`)
         .then(response => response.json())
         .then(data => {
             if (data && Array.isArray(data.channels)) {
@@ -102,5 +102,4 @@ document.addEventListener('DOMContentLoaded', function() {
         populateChannelDropdown();
     }
 });
-
 
