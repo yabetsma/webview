@@ -1,43 +1,5 @@
-// Function to extract user ID from URL parameters
-function getTelegramUserIdFromUrl() {
-    return new Promise((resolve) => {
-        // Extract the fragment part of the URL
-        const fragment = window.location.hash.substring(1);
+// create_giveaway.js
 
-        // Check if the fragment contains the 'tgWebAppData'
-        const params = new URLSearchParams(fragment);
-        const tgWebAppData = params.get('tgWebAppData');
-
-        if (tgWebAppData) {
-            // Decode and parse the 'tgWebAppData' parameter
-            try {
-                const decodedData = decodeURIComponent(tgWebAppData);
-                const dataParams = new URLSearchParams(decodedData);
-                const userData = JSON.parse(dataParams.get('user'));
-                resolve(userData.id);
-            } catch (error) {
-                console.error('Error parsing Telegram user data from URL:', error);
-                resolve(null);
-            }
-        } else {
-            console.error('Telegram Web App data not found in URL.');
-            resolve(null);
-        }
-    });
-}
-
-// Function to get the user ID
-async function getTelegramUserId() {
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-        return userId;
-    } else {
-        return await getTelegramUserIdFromUrl();
-    }
-}
-
-// Fetch channels and populate the select dropdown
 async function fetchChannels() {
     try {
         const creatorId = await getTelegramUserId();
@@ -59,6 +21,11 @@ async function fetchChannels() {
                     option.textContent = channel.username;
                     channelSelect.appendChild(option);
                 });
+
+                if (channels.length === 0) {
+                    alert('No channels found. Please add a channel before creating a giveaway.');
+                    window.location.href = 'add_channel.html'; // Redirect to "Add Channel" page
+                }
             } else {
                 console.error('Channel select element not found.');
             }
@@ -70,45 +37,9 @@ async function fetchChannels() {
     }
 }
 
-// Handle form submission for adding a channel
-async function addChannel(event) {
-    event.preventDefault();
+document.addEventListener('DOMContentLoaded', fetchChannels);
 
-    const usernameInput = document.getElementById('channel_username');
-    const username = usernameInput ? usernameInput.value : null;
-    if (!username) {
-        alert('Username is required.');
-        return;
-    }
-
-    const creatorId = await getTelegramUserId();
-    if (!creatorId) {
-        alert('Unable to get user ID from Telegram.');
-        return;
-    }
-
-    try {
-        const response = await fetch('https://backend1-production-29e4.up.railway.app/add_channel', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, creator_id: creatorId })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            alert('Channel added successfully!');
-        } else {
-            alert('Error adding channel: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Error adding channel:', error);
-    }
-}
-
-// Handle form submission for creating a giveaway
-async function createGiveaway(event) {
+document.getElementById('create_giveaway_form')?.addEventListener('submit', async function(event) {
     event.preventDefault();
 
     const giveawayNameInput = document.getElementById('giveaway_name');
@@ -152,11 +83,4 @@ async function createGiveaway(event) {
     } catch (error) {
         console.error('Error creating giveaway:', error);
     }
-}
-
-// Event listeners
-document.getElementById('add_channel_form')?.addEventListener('submit', addChannel);
-document.getElementById('create_giveaway_form')?.addEventListener('submit', createGiveaway);
-
-// Fetch channels on page load
-document.addEventListener('DOMContentLoaded', fetchChannels);
+});
