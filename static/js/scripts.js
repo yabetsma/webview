@@ -9,17 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const backendUrl = 'https://backend1-production-29e4.up.railway.app';
 
-    // Ensure the element exists before adding an event listener
     if (addChannelForm) {
         addChannelForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
             fetch(`${backendUrl}/add_channel`, {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    "Content-Type": "multipart/form-data"
-                },
                 body: formData
             })
             .then(response => response.json())
@@ -51,10 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(createGiveawayForm);
             fetch(`${backendUrl}/create_giveaway`, {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    "Content-Type": "multipart/form-data"
-                },
                 body: formData
             })
             .then(response => response.json())
@@ -73,14 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to reload channels list
     function reloadChannels() {
         fetch(`${backendUrl}/`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "multipart/form-data"
-            }
+            method: 'GET'
         })
         .then(response => response.json())
         .then(data => {
@@ -99,7 +85,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Call reloadChannels when the DOM is fully loaded
     reloadChannels();
 });
-
