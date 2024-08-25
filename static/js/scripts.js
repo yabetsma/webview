@@ -14,101 +14,87 @@ document.addEventListener('DOMContentLoaded', function() {
         addChannelForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
-
             fetch(`${backendUrl}/add_channel`, {
                 method: 'POST',
-                body: formData,
                 headers: {
                     'Accept': 'application/json'
-                }
+                },
+                body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
+                channelMessage.textContent = data.message;
                 if (data.success) {
-                    channelMessage.textContent = 'Channel added successfully!';
-                    addChannelForm.reset();
+                    channelMessage.style.color = 'green';
+                    // Reload channels in the select list
+                    reloadChannels();
                 } else {
-                    channelMessage.textContent = 'Failed to add channel: ' + data.message;
+                    channelMessage.style.color = 'red';
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                channelMessage.textContent = 'An error occurred: ' + error.message;
+                channelMessage.textContent = `Error: ${error.message}`;
+                channelMessage.style.color = 'red';
             });
-            
         });
     }
 
-    // Show Create Giveaway Form
-    if (createGiveawayButton) {
-        createGiveawayButton.addEventListener('click', function() {
-            createGiveawayFormContainer.classList.toggle('hidden');
-            if (!createGiveawayFormContainer.classList.contains('hidden')) {
-                populateChannelDropdown(); // Populate dropdown when showing form
-            }
-        });
-    }
+    // Handle Create Giveaway Button click
+    createGiveawayButton.addEventListener('click', function() {
+        createGiveawayFormContainer.style.display = 'block';
+    });
 
     // Handle Create Giveaway Form
     if (createGiveawayForm) {
         createGiveawayForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
-
             fetch(`${backendUrl}/create_giveaway`, {
                 method: 'POST',
-                body: formData,
                 headers: {
-                    'Access-Control-Allow-Origin': 'https://eyob2one.github.io/giveaway-webview/'
-                }
+                    'Accept': 'application/json'
+                },
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
+                giveawayMessage.textContent = data.message;
                 if (data.success) {
-                    giveawayMessage.textContent = 'Giveaway created successfully!';
-                    createGiveawayForm.reset(); // Clear the form
+                    giveawayMessage.style.color = 'green';
                 } else {
-                    giveawayMessage.textContent = 'Failed to create giveaway: ' + data.message;
+                    giveawayMessage.style.color = 'red';
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                giveawayMessage.textContent = 'An error occurred: ' + error.message;
+                giveawayMessage.textContent = `Error: ${error.message}`;
+                giveawayMessage.style.color = 'red';
             });
         });
     }
 
-    // Function to populate the channel dropdown
-    function populateChannelDropdown() {
-        fetch(`${backendUrl}/get_channels`)
-        .then(response => response.json())
-        .then(data => {
-            if (data && Array.isArray(data.channels)) {
-                channelSelect.innerHTML = '<option value="">Select a channel</option>';
-                data.channels.forEach(channel => {
-                    const option = document.createElement('option');
-                    option.value = channel.username;
-                    option.textContent = channel.username;
-                    channelSelect.appendChild(option);
-                });
-            } else {
-                channelSelect.innerHTML = '<option value="">No channels available</option>';
+    // Reload channels list
+    function reloadChannels() {
+        fetch(`${backendUrl}/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
             }
         })
+        .then(response => response.json())
+        .then(data => {
+            channelSelect.innerHTML = '';
+            data.channels.forEach(channel => {
+                const option = document.createElement('option');
+                option.value = channel.username;
+                option.textContent = channel.username;
+                channelSelect.appendChild(option);
+            });
+        })
         .catch(error => {
-            console.error('Error:', error);
-            channelSelect.innerHTML = '<option value="">Error loading channels</option>';
+            console.error('Error loading channels:', error);
         });
     }
 
-    // Initial population of the channel dropdown if the form is visible
-    if (createGiveawayFormContainer && !createGiveawayFormContainer.classList.contains('hidden')) {
-        populateChannelDropdown();
-    }
+    reloadChannels();
 });
 
