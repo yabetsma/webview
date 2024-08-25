@@ -1,14 +1,22 @@
-// Function to extract user ID from the URL if Telegram Web App is not available
+// Function to extract user ID from Telegram Web App URL fragment
 function getTelegramUserIdFromUrl() {
     return new Promise((resolve) => {
-        const queryParams = new URLSearchParams(window.location.search);
-        const userParam = queryParams.get('tgWebAppData');
-        if (userParam) {
+        // Extract the fragment part of the URL
+        const fragment = window.location.hash.substring(1);
+        
+        // Find the tgWebAppData parameter
+        const params = new URLSearchParams(fragment);
+        const tgWebAppData = params.get('tgWebAppData');
+
+        if (tgWebAppData) {
+            // Decode and parse the tgWebAppData parameter
             try {
-                const userData = JSON.parse(decodeURIComponent(userParam));
-                resolve(userData.user.id);
+                const decodedData = decodeURIComponent(tgWebAppData);
+                const dataParams = new URLSearchParams(decodedData);
+                const userData = JSON.parse(dataParams.get('user'));
+                resolve(userData.id);
             } catch (error) {
-                console.error('Error parsing Telegram user data:', error);
+                console.error('Error parsing Telegram user data from URL:', error);
                 resolve(null);
             }
         } else {
@@ -19,7 +27,15 @@ function getTelegramUserIdFromUrl() {
 }
 
 // Function to extract user ID from Telegram Web App or URL
-
+async function getTelegramUserId() {
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        return userId;
+    } else {
+        return await getTelegramUserIdFromUrl();
+    }
+}
 
 // Fetch channels and populate the select dropdown
 async function fetchChannels() {
@@ -43,6 +59,8 @@ async function fetchChannels() {
                     option.textContent = channel.username;
                     channelSelect.appendChild(option);
                 });
+            } else {
+                console.error('Channel select element not found.');
             }
         } else {
             console.error('Error fetching channels:', data.message);
@@ -56,7 +74,8 @@ async function fetchChannels() {
 async function addChannel(event) {
     event.preventDefault();
 
-    const username = document.getElementById('channel_username')?.value;
+    const usernameInput = document.getElementById('channel_username');
+    const username = usernameInput ? usernameInput.value : null;
     if (!username) {
         alert('Username is required.');
         return;
@@ -92,11 +111,17 @@ async function addChannel(event) {
 async function createGiveaway(event) {
     event.preventDefault();
 
-    const giveawayName = document.getElementById('giveaway_name')?.value;
-    const prizeAmount = document.getElementById('prize_amount')?.value;
-    const participantsCount = document.getElementById('participants_count')?.value;
-    const endDate = document.getElementById('end_date')?.value;
-    const channelId = document.getElementById('channel')?.value;
+    const giveawayNameInput = document.getElementById('giveaway_name');
+    const prizeAmountInput = document.getElementById('prize_amount');
+    const participantsCountInput = document.getElementById('participants_count');
+    const endDateInput = document.getElementById('end_date');
+    const channelSelect = document.getElementById('channel');
+
+    const giveawayName = giveawayNameInput ? giveawayNameInput.value : null;
+    const prizeAmount = prizeAmountInput ? prizeAmountInput.value : null;
+    const participantsCount = participantsCountInput ? participantsCountInput.value : null;
+    const endDate = endDateInput ? endDateInput.value : null;
+    const channelId = channelSelect ? channelSelect.value : null;
 
     if (!giveawayName || !prizeAmount || !participantsCount || !endDate || !channelId) {
         alert('All fields are required.');
