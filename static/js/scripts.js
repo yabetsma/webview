@@ -19,15 +19,7 @@ function getTelegramUserIdFromUrl() {
 }
 
 // Function to extract user ID from Telegram Web App or URL
-async function getTelegramUserId() {
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-        return userId;
-    } else {
-        return await getTelegramUserIdFromUrl();
-    }
-}
+
 
 // Fetch channels and populate the select dropdown
 async function fetchChannels() {
