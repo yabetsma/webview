@@ -1,41 +1,57 @@
-// Function to extract user ID from Telegram Web App
-function getTelegramUserId() {
+// Function to extract user ID from the URL if Telegram Web App is not available
+function getTelegramUserIdFromUrl() {
     return new Promise((resolve) => {
-        // Check if Telegram Web App is available
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-            resolve(userId);
+        const queryParams = new URLSearchParams(window.location.search);
+        const userParam = queryParams.get('tgWebAppData');
+        if (userParam) {
+            try {
+                const userData = JSON.parse(decodeURIComponent(userParam));
+                resolve(userData.user.id);
+            } catch (error) {
+                console.error('Error parsing Telegram user data:', error);
+                resolve(null);
+            }
         } else {
-            console.error('Telegram Web App is not available.');
+            console.error('Telegram Web App data not found in URL.');
             resolve(null);
         }
     });
 }
 
+// Function to extract user ID from Telegram Web App or URL
+async function getTelegramUserId() {
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        return userId;
+    } else {
+        return await getTelegramUserIdFromUrl();
+    }
+}
+
 // Fetch channels and populate the select dropdown
 async function fetchChannels() {
     try {
-        // Get the creator ID from Telegram Web App
         const creatorId = await getTelegramUserId();
         if (!creatorId) {
             throw new Error('Unable to get user ID from Telegram.');
         }
 
-        // Fetch channels using the creator ID
         const response = await fetch(`https://backend1-production-29e4.up.railway.app/get_channels?creator_id=${creatorId}`);
         const data = await response.json();
 
         if (data.success) {
             const channels = data.channels;
             const channelSelect = document.getElementById('channel');
-            channelSelect.innerHTML = '<option value="" disabled selected>Select your channel</option>';
-            channels.forEach(channel => {
-                const option = document.createElement('option');
-                option.value = channel.id;
-                option.textContent = channel.username;
-                channelSelect.appendChild(option);
-            });
+            if (channelSelect) {
+                channelSelect.innerHTML = '<option value="" disabled selected>Select your channel</option>';
+                channels.forEach(channel => {
+                    const option = document.createElement('option');
+                    option.value = channel.id;
+                    option.textContent = channel.username;
+                    channelSelect.appendChild(option);
+                });
+            }
         } else {
             console.error('Error fetching channels:', data.message);
         }
@@ -48,11 +64,13 @@ async function fetchChannels() {
 async function addChannel(event) {
     event.preventDefault();
 
-    const username = document.getElementById('channel_username').value;
+    const username = document.getElementById('channel_username')?.value;
+    if (!username) {
+        alert('Username is required.');
+        return;
+    }
 
-    // Get the creator ID from Telegram Web App
     const creatorId = await getTelegramUserId();
-
     if (!creatorId) {
         alert('Unable to get user ID from Telegram.');
         return;
@@ -82,15 +100,18 @@ async function addChannel(event) {
 async function createGiveaway(event) {
     event.preventDefault();
 
-    const giveawayName = document.getElementById('giveaway_name').value;
-    const prizeAmount = document.getElementById('prize_amount').value;
-    const participantsCount = document.getElementById('participants_count').value;
-    const endDate = document.getElementById('end_date').value;
-    const channelId = document.getElementById('channel').value;
+    const giveawayName = document.getElementById('giveaway_name')?.value;
+    const prizeAmount = document.getElementById('prize_amount')?.value;
+    const participantsCount = document.getElementById('participants_count')?.value;
+    const endDate = document.getElementById('end_date')?.value;
+    const channelId = document.getElementById('channel')?.value;
 
-    // Get the creator ID from Telegram Web App
+    if (!giveawayName || !prizeAmount || !participantsCount || !endDate || !channelId) {
+        alert('All fields are required.');
+        return;
+    }
+
     const creatorId = await getTelegramUserId();
-
     if (!creatorId) {
         alert('Unable to get user ID from Telegram.');
         return;
