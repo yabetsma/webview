@@ -1,15 +1,15 @@
-// Function to extract user ID from Telegram Web App URL fragment
+// Function to extract user ID from URL parameters
 function getTelegramUserIdFromUrl() {
     return new Promise((resolve) => {
         // Extract the fragment part of the URL
         const fragment = window.location.hash.substring(1);
-        
-        // Find the tgWebAppData parameter
+
+        // Check if the fragment contains the 'tgWebAppData'
         const params = new URLSearchParams(fragment);
         const tgWebAppData = params.get('tgWebAppData');
 
         if (tgWebAppData) {
-            // Decode and parse the tgWebAppData parameter
+            // Decode and parse the 'tgWebAppData' parameter
             try {
                 const decodedData = decodeURIComponent(tgWebAppData);
                 const dataParams = new URLSearchParams(decodedData);
@@ -26,7 +26,7 @@ function getTelegramUserIdFromUrl() {
     });
 }
 
-// Function to extract user ID from Telegram Web App or URL
+// Function to get the user ID
 async function getTelegramUserId() {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
