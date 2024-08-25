@@ -16,7 +16,11 @@ function getTelegramUserId() {
 // Fetch channels and populate the select dropdown
 async function fetchChannels() {
     try {
-        const response = await fetch('https://backend1-production-29e4.up.railway.app/get_channels');
+        const response = await fetch('https://backend1-production-29e4.up.railway.app/get_channels?creator_id=YOUR_CREATOR_ID'); // Ensure creator_id is correctly set
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         
         if (data.success) {
@@ -36,6 +40,9 @@ async function fetchChannels() {
         console.error('Error fetching channels:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', fetchChannels);
+
 
 // Handle form submission for adding a channel
 async function addChannel(event) {
