@@ -115,4 +115,3 @@ document.getElementById('create_giveaway_form').addEventListener('submit', creat
 
 // Fetch channels on page load
 document.addEventListener('DOMContentLoaded', fetchChannels);
-
