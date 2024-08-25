@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ username, creator_id: creatorId })
             });
+
             const data = await response.json();
 
             if (data.success) {
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Error adding channel:', error);
+            alert('An unexpected error occurred. Please try again later.');
         }
     });
 });
