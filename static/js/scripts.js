@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Access-Control-Allow-Origin': 'https://eyob2one.github.io/giveaway-webview/'
                 }
             })
             .then(response => response.json())
@@ -56,7 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             fetch(`${backendUrl}/create_giveaway`, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Access-Control-Allow-Origin': 'https://eyob2one.github.io/giveaway-webview/'
+                }
             })
             .then(response => response.json())
             .then(data => {
@@ -102,3 +106,4 @@ document.addEventListener('DOMContentLoaded', function() {
         populateChannelDropdown();
     }
 });
+
