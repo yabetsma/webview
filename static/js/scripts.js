@@ -17,7 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`${backendUrl}/add_channel`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Headers" : "Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                 },
                 body: formData
             })
