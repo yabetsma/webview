@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
 
-            fetch('https://2146-31-14-252-13.ngrok-free.app/add_channel', { // Replace with your ngrok URL
+            fetch('https://backend1-production-29e4.up.railway.app/add_channel', { // Replace with your ngrok URL
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
 
-            fetch('https://2146-31-14-252-13.ngrok-free.app/create_giveaway', { // Replace with your ngrok URL
+            fetch('https://backend1-production-29e4.up.railway.app/create_giveaway', { // Replace with your ngrok URL
                 method: 'POST',
                 body: formData
             })
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to populate the channel dropdown
     function populateChannelDropdown() {
-        fetch('https://2146-31-14-252-13.ngrok-free.app/get_channels') // Replace with your ngrok URL
+        fetch('https://backend1-production-29e4.up.railway.app/get_channels') // Replace with your ngrok URL
         .then(response => response.json())
         .then(data => {
             if (data && Array.isArray(data.channels)) {
