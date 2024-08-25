@@ -99,4 +99,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Call reloadChannels when the DOM is fully loaded
     reloadChannels();
 });
-
