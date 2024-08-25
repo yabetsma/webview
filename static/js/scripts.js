@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const addChannelForm = document.getElementById('addChannelForm');
+    const channelMessage = document.getElementById('channelMessage');
     const createGiveawayButton = document.getElementById('createGiveawayButton');
     const createGiveawayFormContainer = document.getElementById('createGiveawayFormContainer');
     const createGiveawayForm = document.getElementById('createGiveawayForm');
     const channelSelect = document.getElementById('channelSelect');
-    const channelMessage = document.getElementById('channelMessage');
     const giveawayMessage = document.getElementById('giveawayMessage');
+
+    const backendUrl = 'https://backend1-production-29e4.up.railway.app';
 
     // Handle Add Channel Form
     if (addChannelForm) {
@@ -13,12 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(addChannelForm);
 
-            fetch('https://backend1-production-29e4.up.railway.app/add_channel', { // Replace with your ngrok URL
+            fetch(`${backendUrl}/add_channel`, { // Use your backend URL
                 method: 'POST',
-                body: formData,
+                body: new URLSearchParams(formData),
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Accept': 'application/json'
                 }
             })
             .then(response => response.json())
@@ -26,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     channelMessage.textContent = 'Channel added successfully!';
                     addChannelForm.reset(); // Clear the form
-                    populateChannelDropdown(); // Refresh the dropdown list
                 } else {
                     channelMessage.textContent = 'Failed to add channel: ' + data.message;
                 }
@@ -54,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const formData = new FormData(createGiveawayForm);
 
-            fetch('https://backend1-production-29e4.up.railway.app/create_giveaway', { // Replace with your ngrok URL
+            fetch(`${backendUrl}/create_giveaway`, { // Use your backend URL
                 method: 'POST',
-                body: formData
+                body: new URLSearchParams(formData)
             })
             .then(response => response.json())
             .then(data => {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to populate the channel dropdown
     function populateChannelDropdown() {
-        fetch('https://backend1-production-29e4.up.railway.app/get_channels') // Replace with your ngrok URL
+        fetch(`${backendUrl}/get_channels`) // Use your backend URL
         .then(response => response.json())
         .then(data => {
             if (data && Array.isArray(data.channels)) {

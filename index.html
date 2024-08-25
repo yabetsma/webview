@@ -78,24 +78,28 @@
     </style>
 </head>
 <body>
-    <div class="header">Giveaway Manager</div>
-    <div class="container">
-        <h1>Welcome to the Giveaway Manager!</h1>
-        <div class="buttons">
-            <a href="./add_payment.html" class="button">Add Payment Method</a>
-            <a href="./create_giveaway.html" class="button">Create Giveaway</a>
-        </div>
+    <header class="header">
+        <h1>Giveaway Manager</h1>
+    </header>
+    <main class="container">
+        <section>
+            <h2>Welcome to the Giveaway Manager!</h2>
+            <div class="buttons">
+                <a href="./add_channel.html" class="button">Add Channel</a>
+                <a href="./create_giveaway.html" class="button">Create Giveaway</a>
+            </div>
+        </section>
 
         <!-- Add Channel Form -->
-        <div class="form-container">
+        <section class="form-container">
             <h2>Add Channel</h2>
             <form id="addChannelForm">
                 <input type="text" id="channel_username" name="channel_username" placeholder="Channel Username" required>
                 <button type="submit">Add Channel</button>
             </form>
             <div id="channelMessage" class="message"></div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="scripts.js"></script>
 </body>

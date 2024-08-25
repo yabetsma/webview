@@ -61,17 +61,20 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <header class="header">
         <h1>Add Channel</h1>
-        <form method="POST" action="/add_channel">
+    </header>
+    <main class="container">
+        <form id="addChannelForm" method="POST" action="/add_channel">
             <div class="form-group">
                 <label for="channel_username">Channel Username</label>
                 <input type="text" id="channel_username" name="channel_username" required>
                 <p class="info">Please add the bot as an admin in your channel before submitting.</p>
             </div>
             <button type="submit" class="button">Add Channel</button>
+            <div id="channelMessage" class="message"></div>
         </form>
-    </div>
+    </main>
 </body>
 </html>
 
