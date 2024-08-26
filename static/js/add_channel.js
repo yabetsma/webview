@@ -28,11 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const data = await response.json();
 
+            const messageDiv = document.getElementById('channelMessage');
+            messageDiv.textContent = data.message;
             if (data.success) {
-                alert('Channel added successfully!');
-                document.getElementById('channel_username').value = ''; // Clear input field after success
-            } else {
-                alert('Error adding channel: ' + data.message);
+                usernameInput.value = '';  // Clear input field after success
             }
         } catch (error) {
             console.error('Error adding channel:', error);
@@ -40,6 +39,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
 
