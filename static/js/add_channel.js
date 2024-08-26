@@ -5,16 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         const usernameInput = document.getElementById('channel_username');
-        const username = usernameInput ? usernameInput.value : null;
+        const username = usernameInput.value;
+        const userId = localStorage.getItem('user_id');
 
-        if (!username) {
-            alert('Username is required.');
-            return;
-        }
-
-        const creatorId = await getTelegramUserId();
-        if (!creatorId) {
-            alert('Unable to get user ID from Telegram.');
+        if (!username || !userId) {
+            alert('Username and User ID are required.');
             return;
         }
 
@@ -24,19 +19,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, creator_id: creatorId })
+                body: JSON.stringify({ username, user_id: userId })
             });
             const data = await response.json();
 
-            const messageDiv = document.getElementById('channelMessage');
-            messageDiv.textContent = data.message;
             if (data.success) {
-                usernameInput.value = '';  // Clear input field after success
+                document.getElementById('channelMessage').innerText = 'Channel added successfully!';
+            } else {
+                document.getElementById('channelMessage').innerText = 'Error adding channel: ' + data.message;
             }
         } catch (error) {
             console.error('Error adding channel:', error);
-            alert('An unexpected error occurred.');
         }
     });
 });
+
 

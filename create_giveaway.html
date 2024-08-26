@@ -64,33 +64,36 @@
     </style>
 </head>
 <body>
-    <main class="container">
+    <div class="container">
+        <h1>Create Giveaway</h1>
         <form id="create_giveaway_form">
+            <div class="form-group">
+                <label for="channel">Select Channel</label>
+                <select id="channel" name="channel" required>
+                    <option value="" disabled selected>Select your channel</option>
+                    <!-- Channels will be populated here -->
+                </select>
+                <p class="info">Please add a channel first to select it here.</p>
+            </div>
             <div class="form-group">
                 <label for="giveaway_name">Giveaway Name</label>
                 <input type="text" id="giveaway_name" name="giveaway_name" required>
             </div>
             <div class="form-group">
-                <label for="prize_amount">Prize Amount</label>
+                <label for="prize_amount">Prize Amount (in Birr)</label>
                 <input type="number" id="prize_amount" name="prize_amount" required>
             </div>
             <div class="form-group">
-                <label for="participants_count">Participants Count</label>
+                <label for="participants_count">Number of Participants</label>
                 <input type="number" id="participants_count" name="participants_count" required>
             </div>
             <div class="form-group">
-                <label for="end_date">End Date</label>
+                <label for="end_date">End Date & Time</label>
                 <input type="datetime-local" id="end_date" name="end_date" required>
             </div>
-            <div class="form-group">
-                <label for="channel_select">Select Channel</label>
-                <select id="channel_select" name="channel_id" required></select>
-            </div>
-            <button type="submit">Create Giveaway</button>
+            <button type="submit" class="button">Create Giveaway</button>
         </form>
-        <div id="giveawayMessage"></div>
-    </main>
-    
+    </div>
     <script src="static/js/common.js"></script>
     <script src="static/js/create_giveaway.js"></script>    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>

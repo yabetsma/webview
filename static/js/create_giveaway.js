@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const creatorId = await getTelegramUserId();
+    const userId = localStorage.getItem('user_id');
     const channelSelect = document.getElementById('channel_select');
 
+    if (!userId) {
+        alert('User ID is missing.');
+        return;
+    }
+
     try {
-        const response = await fetch(`https://backend1-production-29e4.up.railway.app/get_channels?creator_id=${creatorId}`);
+        const response = await fetch(`https://backend1-production-29e4.up.railway.app/get_user_channels?user_id=${userId}`);
         const data = await response.json();
 
-        if (data.success && data.channels.length > 0) {
+        if (data.success) {
             data.channels.forEach(channel => {
                 const option = document.createElement('option');
                 option.value = channel.id;
@@ -14,12 +19,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 channelSelect.appendChild(option);
             });
         } else {
-            const messageDiv = document.getElementById('giveawayMessage');
-            messageDiv.textContent = data.message || 'No channels found.';
+            console.error('Error fetching channels:', data.message);
         }
     } catch (error) {
         console.error('Error fetching channels:', error);
-        alert('An unexpected error occurred.');
     }
 
     const createGiveawayForm = document.getElementById('create_giveaway_form');
@@ -32,6 +35,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         const endDate = document.getElementById('end_date').value;
         const channelId = channelSelect.value;
 
+        if (!name || !prizeAmount || !participantsCount || !endDate || !channelId || !userId) {
+            alert('All fields are required.');
+            return;
+        }
+
         try {
             const response = await fetch('https://backend1-production-29e4.up.railway.app/create_giveaway', {
                 method: 'POST',
@@ -40,17 +48,18 @@ document.addEventListener('DOMContentLoaded', async function() {
                 },
                 body: JSON.stringify({
                     name, prize_amount: prizeAmount, participants_count: participantsCount,
-                    end_date: endDate, channel_id: channelId, creator_id: creatorId
+                    end_date: endDate, channel_id: channelId, user_id: userId
                 })
             });
             const data = await response.json();
 
-            const messageDiv = document.getElementById('giveawayMessage');
-            messageDiv.textContent = data.message;
-
+            if (data.success) {
+                document.getElementById('giveawayMessage').innerText = 'Giveaway created and announced successfully!';
+            } else {
+                document.getElementById('giveawayMessage').innerText = 'Error creating giveaway: ' + data.message;
+            }
         } catch (error) {
             console.error('Error creating giveaway:', error);
-            alert('An unexpected error occurred.');
         }
     });
 });
