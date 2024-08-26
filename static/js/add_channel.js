@@ -1,5 +1,3 @@
-// add_channel.js
-
 document.addEventListener('DOMContentLoaded', function() {
     const addChannelForm = document.getElementById('add_channel_form');
 
@@ -28,19 +26,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ username, creator_id: creatorId })
             });
-
             const data = await response.json();
 
             if (data.success) {
                 alert('Channel added successfully!');
+                document.getElementById('channel_username').value = ''; // Clear input field after success
             } else {
                 alert('Error adding channel: ' + data.message);
             }
         } catch (error) {
             console.error('Error adding channel:', error);
-            alert('An unexpected error occurred. Please try again later.');
+            alert('An unexpected error occurred.');
         }
     });
 });
+
 
 
