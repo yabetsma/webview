@@ -1,3 +1,4 @@
+// add_channel.js
 document.addEventListener('DOMContentLoaded', function() {
     const addChannelForm = document.getElementById('add_channel_form');
 
@@ -33,5 +34,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-

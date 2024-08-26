@@ -24,12 +24,14 @@ function getTelegramUserIdFromUrl() {
     });
 }
 
-// Function to get the user ID
+// Function to get the user ID from Telegram Web App
 async function getTelegramUserId() {
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        return window.Telegram.WebApp.initDataUnsafe.user.id;
-    } else {
-        return await getTelegramUserIdFromUrl();
-    }
+    return new Promise((resolve) => {
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            resolve(window.Telegram.WebApp.initDataUnsafe.user.id);
+        } else {
+            resolve(null); // Ensure to handle the case when SDK is not ready
+        }
+    });
 }

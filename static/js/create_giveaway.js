@@ -1,3 +1,4 @@
+// create_giveaway.js
 document.addEventListener('DOMContentLoaded', async function() {
     const userId = localStorage.getItem('user_id');
     const channelSelect = document.getElementById('channel_select');
@@ -63,4 +64,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 });
-

@@ -1,3 +1,4 @@
+// script.js
 document.addEventListener('DOMContentLoaded', async function() {
     const telegramId = await getTelegramUserId(); // Function to get the user's Telegram ID
 
@@ -25,4 +26,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Unable to get Telegram ID');
     }
 });
-
