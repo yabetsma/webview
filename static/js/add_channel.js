@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const usernameInput = document.getElementById('channel_username');
         const username = usernameInput.value;
-        const userId = localStorage.getItem('user_id');
+        const userId = localStorage.getItem('user_id');  // Get user_id from localStorage
 
         if (!username || !userId) {
             alert('Username and User ID are required.');
