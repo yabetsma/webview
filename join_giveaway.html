@@ -3,12 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giveaway Bot</title>
+    <title>Join the Giveaway</title>
     <link rel="stylesheet" href="static/css/styles.css">
+    <style>
+        /* Custom styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+        }
+        h1, h2 {
+            margin: 0.5em 0;
+        }
+        #giveaway-info, #register-section {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        /* Bouncing emoji animation */
+        .emoji {
+            font-size: 2em;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to the Giveaway Bot</h1>
+        <h1>🎉 Welcome to the Giveaway Bot 🎉</h1>
     </header>
     <main>
         <section id="giveaway-info">
@@ -20,10 +74,13 @@
             <form id="register-form">
                 <label for="giveaway-id">Giveaway ID:</label>
                 <input type="text" id="giveaway-id" name="giveaway-id" required>
-                <button type="submit">Join Giveaway</button>
+                <button type="submit" id="join-button">Join Giveaway</button>
             </form>
+            <div id="congrats-popup" style="display: none;">🎉 Congratulations! You have joined the giveaway successfully! 🎉</div>
         </section>
     </main>
     <script src="static/js/main.js"></script>
+    <script src="static/js/join_giveaway.js"></script>
 </body>
 </html>
+
