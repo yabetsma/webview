@@ -3,24 +3,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
 
-        // Get the user ID from Telegram Web App data
         const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
         if (!userId) {
             alert('User ID is missing. Please open this link in the Telegram app.');
             return;
         }
 
-        // Extract the giveaway_id from the URL
+        localStorage.setItem('user_id', userId);
+
+        // Attempt to extract the giveaway_id from the original URL
         const urlParams = new URLSearchParams(window.location.search);
-        const giveawayId = urlParams.get('giveaway_id');
+        let giveawayId = urlParams.get('giveaway_id');
+
+        // If not found, attempt to extract it from the Telegram WebApp hash fragment
+        if (!giveawayId) {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            const tgWebAppData = hashParams.get('tgWebAppData');
+
+            if (tgWebAppData) {
+                try {
+                    const decodedData = decodeURIComponent(tgWebAppData);
+                    const dataParams = new URLSearchParams(decodedData);
+                    giveawayId = dataParams.get('giveaway_id');
+                } catch (error) {
+                    console.error('Error parsing Telegram WebApp data:', error);
+                }
+            }
+        }
 
         if (!giveawayId) {
             alert('Giveaway ID is missing.');
             return;
         }
 
-        console.log("Giveaway ID:", giveawayId); // For debugging purposes
-        console.log("User ID:", userId); // For debugging purposes
+        console.log("Giveaway ID:", giveawayId); // Debugging line to verify the ID
 
         const joinButton = document.getElementById('join-button');
         joinButton.addEventListener('click', async function (event) {
