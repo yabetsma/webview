@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }, 3000);
 
                     // Notify the user via the bot
-                    await fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
+                    await fetch(`https://api.telegram.org/bot7514207604:AAE_p_eFFQ3yOoNn-GSvTSjte2l8UEHl7b8/sendMessage`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
