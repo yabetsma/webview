@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
 
+        // Get the user ID from Telegram Web App data
         const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
         if (!userId) {
             alert('User ID is missing. Please open this link in the Telegram app.');
             return;
         }
 
-        localStorage.setItem('user_id', userId);
-
+        // Extract the giveaway_id from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const giveawayId = urlParams.get('giveaway_id');
 
@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Giveaway ID is missing.');
             return;
         }
+
+        console.log("Giveaway ID:", giveawayId); // For debugging purposes
+        console.log("User ID:", userId); // For debugging purposes
 
         const joinButton = document.getElementById('join-button');
         joinButton.addEventListener('click', async function (event) {
