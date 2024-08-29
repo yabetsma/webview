@@ -4,9 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     joinButton.addEventListener('click', async function () {
         const urlParams = new URLSearchParams(window.location.search);
         const giveawayId = urlParams.get('giveaway_id');
-        const telegramId = await getTelegramUserId(); // Use the function from common.js
-        const username = usernameInput.value;
-        const userId = localStorage.getItem('user_id');
+        const userId = localStorage.getItem('user_id'); // Use the function from common.js
 
         if (giveawayId && telegramId) {
             try {
