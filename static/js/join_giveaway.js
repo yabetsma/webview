@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const giveawayId = urlParams.get('giveaway_id');
         const telegramId = await getTelegramUserId(); // Use the function from common.js
+        const username = usernameInput.value;
+        const userId = localStorage.getItem('user_id');
 
         if (giveawayId && telegramId) {
             try {
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ giveaway_id: giveawayId, telegram_id: telegramId }),
+                    body: JSON.stringify({ giveaway_id: giveawayId, telegram_id: userId }),
                 });
 
                 const result = await response.json();
