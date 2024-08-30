@@ -1,4 +1,3 @@
-// create_giveaway.js
 document.addEventListener('DOMContentLoaded', async function() {
     const userId = localStorage.getItem('user_id');
     const channelSelect = document.getElementById('channel_select');
@@ -15,15 +14,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (data.success) {
             data.channels.forEach(channel => {
                 const option = document.createElement('option');
-                option.value = channel.id;
+                option.value = channel.channel_id;  // Adjusted to match the modified API response key.
                 option.textContent = channel.username;
                 channelSelect.appendChild(option);
             });
         } else {
             console.error('Error fetching channels:', data.message);
+            alert('Failed to load channels: ' + data.message);
         }
     } catch (error) {
         console.error('Error fetching channels:', error);
+        alert('An error occurred while fetching channels.');
     }
 
     const createGiveawayForm = document.getElementById('create_giveaway_form');
@@ -48,8 +49,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name, prize_amount: prizeAmount, participants_count: participantsCount,
-                    end_date: endDate, channel_id: channelId, user_id: userId
+                    name, 
+                    prize_amount: parseFloat(prizeAmount),  // Ensure prize_amount is sent as a number.
+                    participants_count: parseInt(participantsCount, 10),  // Ensure participants_count is sent as an integer.
+                    end_date: new Date(endDate).toISOString(),  // Convert end_date to ISO string.
+                    channel_id: channelId, 
+                    user_id: userId
                 })
             });
             const data = await response.json();
@@ -61,6 +66,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         } catch (error) {
             console.error('Error creating giveaway:', error);
+            document.getElementById('giveawayMessage').innerText = 'An error occurred while creating the giveaway.';
         }
     });
 });
+
