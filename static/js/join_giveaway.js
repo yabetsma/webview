@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize Telegram Web App
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
 
@@ -11,11 +10,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         localStorage.setItem('user_id', userId);
 
-        // Attempt to extract the giveaway_id from the original URL
         const urlParams = new URLSearchParams(window.location.search);
         let giveawayId = urlParams.get('giveaway_id');
 
-        // If not found, attempt to extract it from the Telegram WebApp hash fragment
         if (!giveawayId) {
             const hashParams = new URLSearchParams(window.location.hash.substring(1));
             const tgWebAppData = hashParams.get('tgWebAppData');
@@ -36,11 +33,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        console.log("Giveaway ID:", giveawayId); // Debugging line to verify the ID
+        console.log("Giveaway ID:", giveawayId); 
 
         const joinButton = document.getElementById('join-button');
         joinButton.addEventListener('click', async function (event) {
-            event.preventDefault(); // Prevent the form from submitting traditionally
+            event.preventDefault(); 
 
             try {
                 const response = await fetch('https://backend1-production-29e4.up.railway.app/join_giveaway', {
@@ -58,34 +55,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (result.success) {
                     displayCongratsPopup();
                     setTimeout(() => {
-                        window.Telegram.WebApp.close(); // Close the Telegram Web App
+                        window.Telegram.WebApp.close(); 
                     }, 3000);
 
-                    // Notify the user via the bot
                     await fetch(`https://api.telegram.org/bot7514207604:AAE_p_eFFQ3yOoNn-GSvTSjte2l8UEHl7b8/sendMessage`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                         },
-                        body: new URLSearchParams({
+                        body: JSON.stringify({
                             chat_id: userId,
-                            text: 'You have successfully joined the giveaway! Good luck!',
-                        }),
+                            text: 'You have successfully joined the giveaway!'
+                        })
                     });
+
                 } else {
-                    alert('Failed to join the giveaway. Please try again.');
+                    alert('Failed to join the giveaway: ' + result.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                console.error('Error joining giveaway:', error);
             }
         });
-
-        function displayCongratsPopup() {
-            const congratsPopup = document.getElementById('congrats-popup');
-            congratsPopup.style.display = 'block';
-        }
-    } else {
-        alert('Telegram Web App is not available. Please open this link in the Telegram app.');
     }
 });
