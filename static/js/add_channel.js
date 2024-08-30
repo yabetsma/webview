@@ -1,7 +1,6 @@
 // add_channel.js
 document.addEventListener('DOMContentLoaded', function() {
     const addChannelForm = document.getElementById('add_channel_form');
-    const home = document.getElementById('home_button')
 
     addChannelForm.addEventListener('submit', async function(event) {
         event.preventDefault();
