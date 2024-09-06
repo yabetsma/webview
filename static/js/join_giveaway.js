@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Display the giveaway ID for debugging
             console.log("Giveaway ID:", giveawayId);
+            console.log("User ID:", userId);
+
 
             const joinButton = document.getElementById('join-button');
             joinButton.addEventListener('click', async function (event) {
@@ -31,16 +33,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                             telegram_id: userId
                         }),
                     });
-
+                    
                     const result = await response.json();
-                    if (result.success) {
+                    if (response.ok && result.success) {
                         displayCongratsPopup();
                         setTimeout(() => {
                             window.Telegram.WebApp.close(); // Close the Telegram Web App
                         }, 3000);
-
+                    
                         // Notify the user via the bot
-                        await fetch('https://api.telegram.org/bot7514207604:AAE_p_eFFQ3yOoNn-GSvTSjte2l8UEHl7b8/sendMessage', {
+                        await fetch('https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -51,8 +53,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }),
                         });
                     } else {
-                        alert('Failed to join the giveaway. Please try again.');
+                        console.error('Failed to join the giveaway:', result.message || 'Unknown error');
+                        alert('Failed to join the giveaway: ' + (result.message || 'Unknown error'));
                     }
+                    
                 } catch (error) {
                     console.error('Error:', error);
                     alert('An error occurred. Please try again.');
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error:', error);
             alert(error);
         }
-        
+
     } else {
         alert('Telegram Web App is not available. Please open this link in the Telegram app.');
     }
