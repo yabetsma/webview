@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error:', error);
             alert(error);
         }
+        
     } else {
         alert('Telegram Web App is not available. Please open this link in the Telegram app.');
     }
