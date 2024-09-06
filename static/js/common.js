@@ -35,3 +35,26 @@ async function getTelegramUserId() {
         }
     });
 }
+
+async function getGiveawayId() {
+    return new Promise((resolve) => {
+        if (window.Telegram && window.Telegram.WebApp) {
+            // Initialize Telegram Web App
+            window.Telegram.WebApp.ready();
+            
+            // Extract giveaway_id from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const startAppParam = urlParams.get('startapp');
+            let giveawayId = null;
+
+            // Extract giveaway_id from the startapp parameter
+            if (startAppParam && startAppParam.startsWith('giveaway-')) {
+                giveawayId = startAppParam.split('-')[1];
+            }
+
+            resolve(giveawayId);
+        } else {
+            resolve(null); // Ensure to handle the case when SDK is not ready
+        }
+    });
+}
