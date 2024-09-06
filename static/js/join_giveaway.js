@@ -11,9 +11,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         localStorage.setItem('user_id', userId);
 
-        // Extract the giveaway_id from the URL parameters
+        // Attempt to extract the giveaway_id from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        let giveawayId = urlParams.get('giveaway_id');
+        let startAppParam = urlParams.get('startapp');
+        let giveawayId = null;
+
+        // Extract giveaway_id from the startapp parameter
+        if (startAppParam && startAppParam.startsWith('giveaway-')) {
+            giveawayId = startAppParam.split('-')[1];
+        }
 
         if (!giveawayId) {
             alert('Giveaway ID is missing.');
