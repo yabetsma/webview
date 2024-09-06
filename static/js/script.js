@@ -3,17 +3,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     if (telegramId) {
         try {
-            // Convert telegramId to a string before sending
-            const telegramIdStr = String(telegramId);
-
             const response = await fetch('https://backend1-production-29e4.up.railway.app/init_user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ telegram_id: telegramIdStr })  // Send as string
+                body: JSON.stringify({ telegram_id: telegramId.toString() })  // Make sure it's a string
             });
-
             const data = await response.json();
 
             if (data.success) {
