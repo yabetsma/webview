@@ -44,7 +44,7 @@ async function getGiveawayId() {
             
             // Extract giveaway_id from the URL
             const urlParams = new URLSearchParams(window.location.search);
-            const startAppParam = urlParams.get('startapp');
+            const startAppParam = urlParams.get('tgWebAppStartParma');
             let giveawayId = null;
 
             // Extract giveaway_id from the startapp parameter
