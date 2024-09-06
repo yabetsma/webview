@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem('user_id', userId);
 
         // Attempt to extract the giveaway_id from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        let startAppParam = urlParams.get('tgWebAppStartParam');
+        const fragment = window.location.hash.substring(1);
+        const params = new URLSearchParams(fragment);
+        let startAppParam = params.get('tgWebAppStartParam');
         let giveawayId = null;
 
         // Extract giveaway_id from the startapp parameter
