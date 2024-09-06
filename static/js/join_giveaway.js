@@ -11,26 +11,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         localStorage.setItem('user_id', userId);
 
-        // Attempt to extract the giveaway_id from the original URL
-        
+        // Extract the giveaway_id from the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         let giveawayId = urlParams.get('giveaway_id');
-
-        // If not found, attempt to extract it from the Telegram WebApp hash fragment
-        if (!giveawayId) {
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            const tgWebAppData = hashParams.get('tgWebAppData');
-
-            if (tgWebAppData) {
-                try {
-                    const decodedData = decodeURIComponent(tgWebAppData);
-                    const dataParams = new URLSearchParams(decodedData);
-                    giveawayId = dataParams.get('giveaway_id');
-                } catch (error) {
-                    console.error('Error parsing Telegram WebApp data:', error);
-                }
-            }
-        }
 
         if (!giveawayId) {
             alert('Giveaway ID is missing.');
