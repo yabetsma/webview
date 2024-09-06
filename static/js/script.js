@@ -1,6 +1,6 @@
 // script.js
 document.addEventListener('DOMContentLoaded', async function() {
-    const telegramId = await getTelegramUserId(); // Function to get the user's Telegram ID
+    const telegramId = String(await getTelegramUserId()); // Function to get the user's Telegram ID
 
     if (telegramId) {
         try {
