@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Attempt to extract the giveaway_id from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        let startAppParam = urlParams.get('startapp');
+        let startAppParam = urlParams.get('tgWebAppStartParam');
         let giveawayId = null;
 
         // Extract giveaway_id from the startapp parameter
