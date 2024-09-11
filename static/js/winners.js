@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // Extract the giveaway ID from the URL parameters
-    const giveawayId = getGiveawayId();
+    const giveawayId = await getGiveawayId();
     if (!giveawayId) {
         alert('Giveaway ID is missing. Please ensure the URL contains the correct parameters.');
         return;
