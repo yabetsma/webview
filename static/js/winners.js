@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Replace 'YOUR_RAILWAY_APP_URL' with your actual Railway app URL
-        const response = await fetch(`https://backend1-production-29e4.up.railway.app/api/giveaway/${giveawayId}/winners`);
+        const response = await fetch(`https://backend1-production-29e4.up.railway.app/api/giveaway/81/winners`);
         const data = await response.json();
 
         if (data.success) {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data.winners.forEach((winner, index) => {
                     const winnerItem = document.createElement('div');
                     winnerItem.className = 'winner-item';
-                    winnerItem.textContent = `${index + 1}. ${winner.user_id}`;
+                    winnerItem.textContent = `${index + 1}. ${winner.id}`;
                     winnerList.appendChild(winnerItem);
                 });
             } else {
