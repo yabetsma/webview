@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const telegramUser = await getTelegramUser();  // Fetch Telegram user details including name and id
+    // Ensure Telegram WebApp object is available
+    const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;  // Fetch Telegram user details including name and id
 
     if (telegramUser && telegramUser.id) {
         try {
@@ -29,4 +30,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Unable to get Telegram user details');
     }
 });
-
