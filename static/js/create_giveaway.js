@@ -1,4 +1,3 @@
-// create_giveaway.js
 document.addEventListener('DOMContentLoaded', async function() {
     const userId = localStorage.getItem('user_id');
     const channelSelect = document.getElementById('channel_select');
@@ -33,13 +32,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         const name = document.getElementById('giveaway_name').value;
         const prizeAmount = document.getElementById('prize_amount').value;
         const participantsCount = document.getElementById('participants_count').value;
-        const endDate = document.getElementById('end_date').value;
+        let endDate = document.getElementById('end_date').value;
         const channelId = channelSelect.value;
 
         if (!name || !prizeAmount || !participantsCount || !endDate || !channelId || !userId) {
             alert('All fields are required.');
             return;
         }
+
+        // Convert the endDate to UTC
+        endDate = convertToUTC(endDate);
 
         try {
             const response = await fetch('https://backend1-production-29e4.up.railway.app/create_giveaway', {
@@ -63,4 +65,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.error('Error creating giveaway:', error);
         }
     });
+
+    // Function to convert local date-time to UTC
+    function convertToUTC(localDateTime) {
+        const localDate = new Date(localDateTime);
+        const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+        return utcDate.toISOString(); // Convert to ISO string in UTC
+    }
 });
