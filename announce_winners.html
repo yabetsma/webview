@@ -63,9 +63,9 @@
     </div>
 
     <script>
-        // JavaScript to populate winner list from server
         async function fetchWinners() {
-            const response = await fetch('/announce_winners/1');  // Replace '1' with the actual giveaway ID
+            const giveawayId = 1;  // Replace with actual giveaway ID
+            const response = await fetch(`/api/giveaway/${giveawayId}/winners`);
             const data = await response.json();
             const winnerList = document.getElementById('winnerList');
 
@@ -80,13 +80,12 @@
                     winnerList.appendChild(winnerItem);
                 });
             } else {
-                winnerList.innerHTML = '<p>No winners to display yet.</p>';
+                winnerList.innerHTML = `<p>${data.message}</p>`;
             }
         }
 
+        // Fetch winners when the page loads
         fetchWinners();
     </script>
 </body>
 </html>
-
-
