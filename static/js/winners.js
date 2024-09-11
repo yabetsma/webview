@@ -54,28 +54,7 @@ async function getGiveawayId() {
             if (parts.length === 2 && parts[0] === 'giveaway_id') {
                 const giveawayId = parts[1];
                 if (giveawayId) {
-                    // Extract user ID from the hash fragment
-                    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-                    const tgWebAppData = hashParams.get('tgWebAppData');
-
-                    if (tgWebAppData) {
-                        try {
-                            const decodedData = decodeURIComponent(tgWebAppData);
-                            const dataParams = new URLSearchParams(decodedData);
-                            const userId = dataParams.get('user') ? JSON.parse(dataParams.get('user')).id : null;
-
-                            if (userId) {
-                                resolve({ giveawayId, userId });
-                            } else {
-                                reject('User ID is missing in the WebApp data.');
-                            }
-                        } catch (error) {
-                            console.error('Error parsing Telegram WebApp data:', error);
-                            reject('Error parsing WebApp data.');
-                        }
-                    } else {
-                        reject('tgWebAppData is missing in the hash fragment.');
-                    }
+                    resolve(giveawayId);  // Only resolve the giveawayId
                 } else {
                     reject('Giveaway ID is missing in the tgWebAppStartParam.');
                 }
