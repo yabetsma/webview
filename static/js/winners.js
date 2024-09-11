@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Replace 'YOUR_RAILWAY_APP_URL' with your actual Railway app URL
-        const response = await fetch(`https://backend1-production-29e4.up.railway.app/api/giveaway/81/winners`);
+        const response = await fetch(`https://backend1-production-29e4.up.railway.app/api/giveaway/${giveaway_id}/winners`);
         const data = await response.json();
 
         if (data.success) {
