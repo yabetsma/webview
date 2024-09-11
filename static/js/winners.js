@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data.winners.forEach((winner, index) => {
                     const winnerItem = document.createElement('div');
                     winnerItem.className = 'winner-item';
-                    winnerItem.textContent = `${index + 1}. ${winner.username}`;
+                    winnerItem.textContent = `${index + 1}. ${winner.user_id}`;
                     winnerList.appendChild(winnerItem);
                 });
             } else {
