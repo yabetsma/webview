@@ -35,19 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Function to extract giveaway ID from URL
-function getGiveawayId() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const startParam = urlParams.get('tgWebAppStartParam');
-
-    if (startParam) {
-        const parts = startParam.split('-');
-        if (parts.length === 2 && parts[0] === 'giveaway_id') {
-            return parts[1];
-        }
-    }
-    return null;
-}
-
 async function getGiveawayId() {
     return new Promise((resolve, reject) => {
         if (window.Telegram && window.Telegram.WebApp) {
