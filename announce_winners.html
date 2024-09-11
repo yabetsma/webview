@@ -61,31 +61,6 @@
         </div>
         <button class="button" onclick="fetchWinners()">Refresh Winners</button>
     </div>
-
-    <script>
-        async function fetchWinners() {
-            const giveawayId = 1;  // Replace with actual giveaway ID
-            const response = await fetch(`/api/giveaway/${giveawayId}/winners`);
-            const data = await response.json();
-            const winnerList = document.getElementById('winnerList');
-
-            // Clear previous winners list
-            winnerList.innerHTML = '';
-
-            if (data.success) {
-                data.winners.forEach(winner => {
-                    const winnerItem = document.createElement('div');
-                    winnerItem.className = 'winner-item';
-                    winnerItem.textContent = winner.username;
-                    winnerList.appendChild(winnerItem);
-                });
-            } else {
-                winnerList.innerHTML = `<p>${data.message}</p>`;
-            }
-        }
-
-        // Fetch winners when the page loads
-        fetchWinners();
-    </script>
+    <script src="static/js/winners.js"></script>
 </body>
 </html>
