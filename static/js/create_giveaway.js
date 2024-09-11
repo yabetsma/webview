@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Function to convert local date-time to UTC
     function convertToUTC(localDateTime) {
         const localDate = new Date(localDateTime);
-        const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+        const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
         return utcDate.toISOString(); // Convert to ISO string in UTC
     }
 });
