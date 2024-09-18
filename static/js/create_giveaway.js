@@ -68,8 +68,18 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Function to convert local date-time to UTC
     function convertToUTC(localDateTime) {
+        // Parse the localDateTime and ensure it's valid
         const localDate = new Date(localDateTime);
+        
+        if (isNaN(localDate.getTime())) {
+            console.error("Invalid date format:", localDateTime);
+            return null;
+        }
+    
+        // Get the UTC equivalent of the date
         const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
-        return utcDate.toISOString(); // Convert to ISO string in UTC
+        
+        return utcDate.toISOString(); // Returns ISO string in UTC format
     }
+    
 });
