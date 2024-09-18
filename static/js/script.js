@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 },
                 body: JSON.stringify({
                     telegram_id: telegramUser.id.toString(),  // Telegram ID (as a string)
-                    first_name: telegramUser.first_name || '',  // Optional first name
+                    first_name: telegramUser.first_name,  // Optional first name
                     last_name: telegramUser.last_name || '',    // Optional last name
-                    username: telegramUser.username || '',      // Optional username
+                    username: telegramUser.username,      // Optional username
                     language_code: telegramUser.language_code || ''  // Optional language code
                 })
             });
