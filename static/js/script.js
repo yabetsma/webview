@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
     // Ensure Telegram WebApp object is available
-    const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;  // Fetch Telegram user details including name and id
+    const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;  // Fetch Telegram user details
 
     if (telegramUser && telegramUser.id) {
         try {
@@ -10,9 +10,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    telegram_id: telegramUser.id.toString(),  // Ensure ID is sent as string
-                    first_name: telegramUser.first_name || '',  // Optional
-                    last_name: telegramUser.last_name || ''    // Optional
+                    telegram_id: telegramUser.id.toString(),  // Telegram ID (as a string)
+                    first_name: telegramUser.first_name || '',  // Optional first name
+                    last_name: telegramUser.last_name || '',    // Optional last name
+                    username: telegramUser.username || '',      // Optional username
+                    language_code: telegramUser.language_code || ''  // Optional language code
                 })
             });
             const data = await response.json();
