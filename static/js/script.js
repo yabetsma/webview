@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     if (telegramUser && telegramUser.id) {
         try {
-            const response = await fetch('https://backend1-production-29e4.up.railway.app/init_user', {
+            const response = await fetch('https://2af5-89-39-107-203.ngrok-free.app/init_user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

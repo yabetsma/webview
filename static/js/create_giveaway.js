@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     try {
-        const response = await fetch(`https://backend1-production-29e4.up.railway.app/get_user_channels?user_id=${userId}`);
+        const response = await fetch(`https://2af5-89-39-107-203.ngrok-free.app/get_user_channels?user_id=${userId}`);
         const data = await response.json();
 
         if (data.success) {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         endDate = convertToUTC(endDate);
 
         try {
-            const response = await fetch('https://backend1-production-29e4.up.railway.app/create_giveaway', {
+            const response = await fetch('https://2af5-89-39-107-203.ngrok-free.app/create_giveaway', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

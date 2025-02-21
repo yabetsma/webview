@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 event.preventDefault(); // Prevent the form from submitting traditionally
 
                 try {
-                    const response = await fetch('https://backend1-production-29e4.up.railway.app/join_giveaway', {
+                    const response = await fetch('https://2af5-89-39-107-203.ngrok-free.app/join_giveaway', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
