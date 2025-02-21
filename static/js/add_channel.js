@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch('https://2af5-89-39-107-203.ngrok-free.app/add_channel', {
+            const response = await fetch('https://backend-production-5459.up.railway.app/add_channel', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

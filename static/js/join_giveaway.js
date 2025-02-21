@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 event.preventDefault(); // Prevent the form from submitting traditionally
 
                 try {
-                    const response = await fetch('https://2af5-89-39-107-203.ngrok-free.app/join_giveaway', {
+                    const response = await fetch('https://backend-production-5459.up.railway.app/join_giveaway', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -40,9 +40,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         setTimeout(() => {
                             window.Telegram.WebApp.close(); // Close the Telegram Web App
                         }, 3000);
+
+                        require("dotenv").config();
+                        const botToken = process.env.BOT_TOKEN;
                     
                         // Notify the user via the bot
-                        await fetch('https://api.telegram.org/bot7514207604:AAE_p_eFFQ3yOoNn-GSvTSjte2l8UEHl7b8/sendMessage', {
+                        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',

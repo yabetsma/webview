@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Use the correct variable name `giveawayId` in the fetch URL
-        const response = await fetch(`https://2af5-89-39-107-203.ngrok-free.app/api/giveaway/${giveawayId}/winners`);
+        const response = await fetch(`https://backend-production-5459.up.railway.app/api/giveaway/${giveawayId}/winners`);
         const data = await response.json();
 
         if (data.success) {
