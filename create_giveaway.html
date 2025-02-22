@@ -3,117 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Giveaway</title>
+    <title>Create Giveaway - Verify Channel</title>
     <style>
+        /* --- Reset and Base Styles --- */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px; /* Add default body padding */
+            background-color: #f8f9fa;
+            color: #343a40;
+            display: flex;
+            flex-direction: column; /* Ensure vertical flex direction for body */
+            align-items: center; /* Center content horizontally */
+            justify-content: flex-start; /* Align items to the start vertically */
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 95%; /* Take up most of mobile width */
+            max-width: 600px; /* Limit max width on larger screens */
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            display: flex; /* Make container a flex container */
+            flex-direction: column; /* Stack elements vertically inside container */
+            align-items: stretch; /* Stretch items to container width */
         }
+
+        /* --- Headings and Text --- */
         h1 {
-            text-align: center;
-            color: #6c5ce7;
+            font-size: 2.0em; /* Main heading size */
+            color: #007bff;
+            margin-bottom: 15px; /* Reduced bottom margin */
+            text-align: center; /* Center align main heading */
         }
+
+        h2 {
+            font-size: 1.6em; /* Step heading size */
+            color: #495057;
+            margin-bottom: 25px; /* Spacing below step heading */
+            text-align: center; /* Center align step heading */
+            font-weight: normal; /* Standard font weight for step heading */
+        }
+
+        .step-description {
+            font-size: 1.0em; /* Description text size */
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 30px; /* Spacing below description */
+            text-align: center; /* Center align description text */
+        }
+
+        /* --- Form Elements --- */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* Increased spacing between form groups */
+            width: 100%; /* Ensure form-group takes full width */
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+
+        .form-group label {
+            display: block; /* Ensure label is block to take full width */
+            font-weight: 500;
+            margin-bottom: 10px; /* Spacing below label */
+            color: #495057;
+            text-align: left; /* Left align labels */
+            font-size: 0.95em; /* Label font size */
         }
-        select,
-        input[type="text"],
-        input[type="number"],
-        input[type="datetime-local"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+
+        .form-group input[type="text"] {
+            width: 100%; /* Ensure input takes full width */
+            padding: 14px 15px; /* Increased padding for input */
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1.0em; /* Input font size */
+            color: #495057;
+            box-sizing: border-box;
         }
-        .info {
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 10px;
+
+        .form-group input[type="text"]::placeholder {
+            color: #aaa; /* Placeholder text color */
+            opacity: 0.9; /* Slightly reduce placeholder opacity */
         }
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #6c5ce7;
+
+
+        .form-group input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: 0;
+        }
+
+        /* --- Button --- */
+        button#verify-channel-button {
+            display: block; /* Keep button as block to ensure full width and vertical stacking */
+            width: 100%; /* Full width button - Important for vertical layout */
+            max-width: 200px; /* Limit button width */
+            padding: 12px 25px; /* Reduced padding - for smaller button */
+            font-size: 1.0em; /* Slightly smaller font size */
+            font-weight: 500;
             color: white;
-            text-align: center;
+            background-color: #007bff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Top margin for button */
+            margin-left: auto;  /* Center button horizontally within container */
+            margin-right: auto; /* Center button horizontally within container */
         }
-        a{
-            text-decoration-line: none;
+
+        button#verify-channel-button:hover {
+            background-color: #0056b3;
         }
-        .home_button {
-            display:block;
-            padding: 0;
-            margin: 0;
-            cursor: pointer;
-            font-size: 1.2em;
+
+        /* --- Status Message --- */
+        #channel-verification-status {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1em;
         }
-        .button:hover {
-            background-color: #4834d4;
+
+        #channel-verification-status.success {
+            color: #28a745; /* Green for success */
+        }
+
+        #channel-verification-status.error {
+            color: #dc3545; /* Red for error */
+        }
+
+        /* --- Loading Page (Consistent) --- */
+        #loading-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(244, 244, 249, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1.2s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #loading-message {
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        #content {
+            display: none; /* Hidden initially */
+        }
+
+
+        /* --- Media Query for Larger Screens (Tablets, Desktops) --- */
+        @media (min-width: 768px) { /* Adjust breakpoint if needed */
+            .container {
+                max-width: 650px; /* Slightly wider container on larger screens */
+                padding: 40px; /* More padding on larger screens */
+            }
+
+            h1 {
+                font-size: 2.3em; /* Slightly larger main heading */
+            }
+
+            h2 {
+                font-size: 1.7em; /* Slightly larger step heading */
+            }
+
+            .step-description {
+                font-size: 1.05em; /* Slightly larger description */
+            }
+
+            .form-group label {
+                font-size: 1.0em; /* Slightly larger label */
+            }
+
+            .form-group input[type="text"] {
+                font-size: 1.05em; /* Slightly larger input text */
+                padding: 15px 18px; /* Slightly more input padding */
+                border-radius: 10px; /* More rounded inputs */
+            }
+
+            button#verify-channel-button {
+                max-width: 220px; /* Slightly wider button on larger screens */
+                padding: 14px 30px; /* Slightly larger button */
+                font-size: 1.1em; /* Larger button text */
+                border-radius: 10px; /* More rounded button */
+            }
+
+            #channel-verification-status {
+                font-size: 1.1em; /* Slightly larger status message */
+                margin-top: 25px;
+            }
+
+            .spinner {
+                width: 60px; /* Larger spinner */
+                height: 60px;
+                margin-bottom: 20px;
+            }
+
+            #loading-message {
+                font-size: 1.0em; /* Slightly larger loading message font */
+            }
         }
     </style>
 </head>
 <body>
-    <menu type="toolbar" class="home_button">
-        <a href="index.html" class="button">Home</a>
-    </menu>
-    <div class="container">
-        <h1>Create Giveaway</h1>
-        <form id="create_giveaway_form">
-            <div class="form-group">
-                <label for="channel">Select Channel</label>
-                <select id="channel_select" name="channel" required>
-                    <option value="" disabled selected>Select your channel</option>
-                    <!-- Channels will be populated here -->
-                </select>
-                <p class="info">Please add a channel first to select it here.</p>
-            </div>
-            <div class="form-group">
-                <label for="giveaway_name">Giveaway Name</label>
-                <input type="text" id="giveaway_name" name="giveaway_name" required>
-            </div>
-            <div class="form-group">
-                <label for="prize_amount">Prize Amount (in Birr)</label>
-                <input type="number" id="prize_amount" name="prize_amount" required>
-            </div>
-            <div class="form-group">
-                <label for="participants_count">Number of Participants</label>
-                <input type="number" id="participants_count" name="participants_count" required>
-            </div>
-            <div class="form-group">
-                <label for="end_date">End Date & Time</label>
-                <input type="datetime-local" id="end_date" name="end_date" required>
-            </div>
-            <button type="submit" class="button">Create Giveaway</button>
-        </form>
-        <p id="giveawayMessage"></p>
+
+<div id="loading-page">
+    <div class="spinner"></div>
+    <p id="loading-message">Verifying Channel...</p>
+</div>
+
+<div id="content" class="container">
+    <h1>Create Your Giveaway</h1>
+    <h2>Step 1: Verify Telegram Channel</h2>
+    <p class="step-description">To get started, please verify that you are an administrator of your Telegram channel. This ensures the giveaway is managed securely and authentically.</p>
+
+    <div class="form-group">
+        <label for="channel-username">Enter your Telegram Channel Username:</label>
+        <input type="text" id="channel-username" placeholder="@yourchannelusername">
     </div>
-    <script src="static/js/common.js"></script>
-    <script src="static/js/create_giveaway.js"></script>    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
+
+    <button id="verify-channel-button">Verify Channel</button>
+
+    <div id="channel-verification-status" style="display: none;"></div>
+</div>
+
+<script src="static/js/create_giveaway.js"></script>
 </body>
 </html>
-
-
-

@@ -1,114 +1,92 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('create_giveaway_form');
-    const channelSelect = document.getElementById('channel_select');
-    const endDateInput = document.getElementById('end_date');
-    const giveawayMessage = document.getElementById('giveawayMessage');
-    const endDateError = document.getElementById('endDateError'); // Get the error message element
-    const backendBaseUrl = 'https://backend-production-5459.up.railway.app';
-    const telegramWebApp = Telegram.WebApp;
-    const initData = telegramWebApp.initDataUnsafe;
-    const userId = initData?.user?.id;
+    const verifyChannelButton = document.getElementById('verify-channel-button');
+    const channelUsernameInput = document.getElementById('channel-username');
+    const channelVerificationStatus = document.getElementById('channel-verification-status');
+    const contentElement = document.getElementById('content');
+    const loadingPageElement = document.getElementById('loading-page');
+    const loadingMessageElement = document.getElementById('loading-message');
 
-    // Function to fetch and populate channels for the user
-    async function fetchChannels() {
-        try {
-            const response = await fetch(`${backendBaseUrl}/get_user_channels?user_id=${localStorage.getItem('user_id')}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.success && data.channels) {
-                populateChannelDropdown(data.channels);
-            } else {
-                giveawayMessage.textContent = data.message || 'Could not fetch channels.';
-            }
-        } catch (error) {
-            console.error('Fetch channels error:', error);
-            giveawayMessage.textContent = 'Failed to load channels. Please check your connection.';
+
+    const backendBaseUrl = 'https://backend-production-5459.up.railway.app'; // Your backend URL
+
+
+    function showContent() {
+        if (loadingPageElement) {
+            loadingPageElement.style.display = 'none';
+        }
+        if (contentElement) {
+            contentElement.style.display = 'flex';
         }
     }
 
-    // Function to populate the channel dropdown
-    function populateChannelDropdown(channels) {
-        channelSelect.innerHTML = '<option value="" disabled selected>Select your channel</option>'; // Clear existing options and reset default
-        channels.forEach(channel => {
-            const option = document.createElement('option');
-            option.value = channel.id;
-            option.textContent = channel.username ? `${channel.username} (ID: ${channel.id})` : `Channel ID: ${channel.id}`;
-            channelSelect.appendChild(option);
-        });
+    function showLoading(message) {
+        if (loadingPageElement) {
+            loadingPageElement.style.display = 'flex';
+        }
+        if (loadingMessageElement && message) {
+            loadingMessageElement.textContent = message;
+        }
+        if (contentElement) {
+            contentElement.style.display = 'none';
+        }
     }
 
-    // Function to validate end date
-    function validateEndDate() {
-        const selectedEndDate = new Date(endDateInput.value);
-        const now = new Date();
-        endDateError.textContent = ''; // Clear any previous error message
-        endDateInput.setCustomValidity(''); // Clear any previous custom validity
 
-        if (selectedEndDate <= now) {
-            endDateError.textContent = 'End date must be in the future.';
-            endDateInput.setCustomValidity('End date must be in the future.'); // Set custom validity to prevent form submission
-            return false;
+    async function verifyChannelOwnership(channelUsername) {
+        showLoading("Verifying Channel...");
+        channelVerificationStatus.style.display = 'none'; // Hide previous status
+
+        if (!channelUsername) {
+            displayVerificationStatus("Please enter a channel username.", false);
+            return;
         }
-        return true;
-    }
-
-    // Event listener for end date input to perform real-time validation
-    endDateInput.addEventListener('change', validateEndDate);
-
-
-    // Event listener for form submission
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        if (!validateEndDate()) { // Validate the date again on form submission
-            return; // Stop submission if date is invalid
-        }
-
-        giveawayMessage.textContent = 'Creating giveaway...';
-
-        const channelId = channelSelect.value;
-        const giveawayName = document.getElementById('giveaway_name').value;
-        const prizeAmount = document.getElementById('prize_amount').value;
-        const participantsCount = document.getElementById('participants_count').value;
-        const endDate = endDateInput.value; // Get the date value directly from the input
-
-        const giveawayData = {
-            user_id: localStorage.getItem('user_id'), // Assuming user_id is stored in localStorage
-            channel_id: channelId,
-            name: giveawayName,
-            prize_amount: prizeAmount,
-            participants_count: participantsCount,
-            end_date: endDate // Send the date string as is
-        };
-
 
         try {
-            const response = await fetch(`${backendBaseUrl}/create_giveaway`, {
+            const response = await fetch(`${backendBaseUrl}/verify_channel_admin`, { // Backend endpoint to verify channel admin
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(giveawayData)
+                body: JSON.stringify({ channel_username: channelUsername }) // Send channel username to backend
             });
 
-            const data = await response.json();
-            if (response.ok && data.success) {
-                giveawayMessage.textContent = 'Giveaway created successfully!';
-                form.reset(); // Clear the form
-                endDateError.textContent = ''; // Clear error message after successful submission
-                endDateInput.setCustomValidity(''); // Clear custom validity after successful submission
-
-            } else {
-                giveawayMessage.textContent = data.message || 'Failed to create giveaway.';
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+
+            const data = await response.json();
+            if (data.success) {
+                displayVerificationStatus("Channel verified successfully!", true);
+                // ** NEXT STEP:  Enable the rest of the giveaway form here **
+                // For now, just log success
+                console.log("Channel verification successful:", data);
+            } else {
+                displayVerificationStatus(data.message || "Channel verification failed. Please check username and bot admin status.", false);
+                console.error("Channel verification failed:", data.message);
+            }
+
         } catch (error) {
-            console.error('Create giveaway error:', error);
-            giveawayMessage.textContent = 'Failed to create giveaway. Please check your connection.';
+            displayVerificationStatus("Error verifying channel. Please try again later.", false);
+            console.error("Error during channel verification:", error);
+        } finally {
+            showContent(); // Show content after verification attempt (success or failure)
         }
+    }
+
+
+    function displayVerificationStatus(message, isSuccess) {
+        channelVerificationStatus.textContent = message;
+        channelVerificationStatus.className = 'giveaway-status-message channel-verification'; // Reset class
+        channelVerificationStatus.classList.add(isSuccess ? 'success' : 'error');
+        channelVerificationStatus.style.display = 'block'; // Show status message
+    }
+
+
+    verifyChannelButton.addEventListener('click', function() {
+        const channelUsername = channelUsernameInput.value.trim();
+        verifyChannelOwnership(channelUsername);
     });
 
-    // Fetch channels when the page loads
-    fetchChannels();
+    showContent(); // Initially show content (loading page will handle initial loading if needed later)
+
 });
