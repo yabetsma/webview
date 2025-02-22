@@ -1,103 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giveaway Bot Platform</title>
-    <script>
-        // Initialize Telegram WebApp
-        var tg = window.Telegram.WebApp;
-        tg.expand(); // Expands the app to full size
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giveaway Bot Platform</title>
+  <script>
+    // Initialize Telegram WebApp and update theme variables
+    var tg = window.Telegram.WebApp;
+    tg.expand();
 
-        function applyTelegramTheme() {
-            document.body.style.backgroundColor = tg.themeParams.bg_color || "#f8f9fa";
-            document.body.style.color = tg.themeParams.text_color || "#343a40";
-            document.querySelector(".hero-container").style.backgroundColor = tg.themeParams.secondary_bg_color || "#ffffff";
-            document.querySelector(".cta-button").style.backgroundColor = tg.themeParams.button_color || "#007bff";
-            document.querySelector(".cta-button").style.color = tg.themeParams.button_text_color || "#ffffff";
-            document.querySelector(".minimal-footer").style.color = tg.themeParams.hint_color || "#adb5bd";
-        }
-
-        // Apply theme on load
-        applyTelegramTheme();
-
-        // Listen for theme changes
-        tg.onEvent('themeChanged', applyTelegramTheme);
-    </script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .hero-container {
-            padding: 50px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 95%;
-            transition: background-color 0.3s ease;
-        }
-
-        h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-
-        p.tagline {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            line-height: 1.7;
-            transition: color 0.3s ease;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 40px;
-            font-size: 1.3em;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .minimal-footer {
-            margin-top: 50px;
-            font-size: 0.9em;
-            transition: color 0.3s ease;
-        }
-
-        /* Optional: Subtle animation for button */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .cta-button {
-            animation: pulse 2s infinite alternate;
-        }
-    </style>
+    function applyTelegramTheme() {
+      // Update CSS variables using Telegram theme parameters or fallback defaults
+      document.documentElement.style.setProperty('--bg-color', tg.themeParams.bg_color || '#f8f9fa');
+      document.documentElement.style.setProperty('--text-color', tg.themeParams.text_color || '#343a40');
+      document.documentElement.style.setProperty('--hero-bg', tg.themeParams.secondary_bg_color || '#ffffff');
+      document.documentElement.style.setProperty('--primary-color', tg.themeParams.button_color || '#007bff');
+      document.documentElement.style.setProperty('--button-text-color', tg.themeParams.button_text_color || '#ffffff');
+      document.documentElement.style.setProperty('--footer-color', tg.themeParams.hint_color || '#adb5bd');
+    }
+    
+    applyTelegramTheme();
+    tg.onEvent('themeChanged', applyTelegramTheme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --text-color: #343a40;
+      --hero-bg: #ffffff;
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --button-text-color: #ffffff;
+      --footer-color: #adb5bd;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      /* Optionally, you can add a subtle gradient:
+      background: linear-gradient(135deg, var(--bg-color), #e9ecef); */
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .hero-container {
+      padding: 50px;
+      background-color: var(--hero-bg);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 95%;
+      transition: background-color 0.3s ease;
+    }
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: var(--primary-color);
+      transition: color 0.3s ease;
+    }
+    p.tagline {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      line-height: 1.7;
+      color: var(--text-color);
+      transition: color 0.3s ease;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 15px 40px;
+      font-size: 1.3em;
+      font-weight: 600;
+      text-decoration: none;
+      background-color: var(--primary-color);
+      color: var(--button-text-color);
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      animation: pulse 2s infinite alternate;
+    }
+    .cta-button:hover {
+      background-color: var(--primary-hover);
+    }
+    .minimal-footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: var(--footer-color);
+      transition: color 0.3s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-    <div class="hero-container">
-        <h1>Effortless Telegram Giveaways</h1>
-        <p class="tagline">Launch beautiful, engaging giveaways to grow your Telegram community. Simple setup, powerful results.</p>
-        <a href="./create_giveaway.html" class="cta-button">Create Giveaway</a>
-    </div>
-
-    <footer class="minimal-footer">
-        &copy; 2024 Your Giveaway Platform. All rights reserved.
-    </footer>
+  <div class="hero-container">
+    <h1>Effortless Telegram Giveaways</h1>
+    <p class="tagline">Launch beautiful, engaging giveaways to grow your Telegram community. Simple setup, powerful results.</p>
+    <a href="./create_giveaway.html" class="cta-button">Create Giveaway</a>
+  </div>
+  <footer class="minimal-footer">
+    &copy; 2024 Your Giveaway Platform. All rights reserved.
+  </footer>
 </body>
 </html>
