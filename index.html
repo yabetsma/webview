@@ -4,42 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giveaway Bot Platform</title>
+    <script>
+        // Initialize Telegram WebApp
+        var tg = window.Telegram.WebApp;
+        tg.expand(); // Expands the app to full size
+
+        function applyTelegramTheme() {
+            document.body.style.backgroundColor = tg.themeParams.bg_color || "#f8f9fa";
+            document.body.style.color = tg.themeParams.text_color || "#343a40";
+            document.querySelector(".hero-container").style.backgroundColor = tg.themeParams.secondary_bg_color || "#ffffff";
+            document.querySelector(".cta-button").style.backgroundColor = tg.themeParams.button_color || "#007bff";
+            document.querySelector(".cta-button").style.color = tg.themeParams.button_text_color || "#ffffff";
+            document.querySelector(".minimal-footer").style.color = tg.themeParams.hint_color || "#adb5bd";
+        }
+
+        // Apply theme on load
+        applyTelegramTheme();
+
+        // Listen for theme changes
+        tg.onEvent('themeChanged', applyTelegramTheme);
+    </script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa; /* Very light gray background */
-            color: #343a40; /* Dark gray text */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .hero-container {
             padding: 50px;
-            background-color: #ffffff; /* White container background */
-            border-radius: 15px; /* Soft rounded corners */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             width: 95%;
+            transition: background-color 0.3s ease;
         }
 
         h1 {
-            font-size: 2.8em; /* Large, impactful headline */
-            color: #007bff; /* Primary brand color - blue */
+            font-size: 2.8em;
             margin-bottom: 15px;
             font-weight: bold;
+            transition: color 0.3s ease;
         }
 
         p.tagline {
             font-size: 1.2em;
-            color: #6c757d; /* Muted gray tagline text */
             margin-bottom: 30px;
             line-height: 1.7;
+            transition: color 0.3s ease;
         }
 
         .cta-button {
@@ -48,20 +67,14 @@
             font-size: 1.3em;
             font-weight: 600;
             text-decoration: none;
-            color: white;
-            background-color: #007bff; /* Primary brand color - blue */
             border-radius: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .minimal-footer {
             margin-top: 50px;
-            color: #adb5bd; /* Light gray footer text */
             font-size: 0.9em;
+            transition: color 0.3s ease;
         }
 
         /* Optional: Subtle animation for button */
@@ -74,7 +87,6 @@
         .cta-button {
             animation: pulse 2s infinite alternate;
         }
-
     </style>
 </head>
 <body>
