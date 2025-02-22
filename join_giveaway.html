@@ -3,120 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Giveaway</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    <title>Join Giveaway</title>
     <style>
-        /* Custom styles for the page */
+        /* --- Telegram Theme Variables and Base Styles --- */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
+            font-family: sans-serif; /* System default sans-serif for better Telegram theme integration */
             text-align: center;
             margin: 0;
             padding: 0;
+            background-color: var(--tg-theme-bg-color, #f0f8ff); /* Telegram background or default light blue */
+            color: var(--tg-theme-text-color, #333); /* Telegram text color or default dark gray */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to top */
+            min-height: 100vh;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
+
+        .container {
+            width: 95%; /* Take up most of the screen width */
+            max-width: 650px; /* Limit container width like @CryptoBot announcement */
+            margin-top: 20px; /* Top margin to give some space from top of viewport */
+            margin-bottom: 20px;
         }
-        h1, h2 {
-            margin: 0.5em 0;
+
+        /* Giveaway Announcement Box - Main Styling */
+        .giveaway-box {
+            background-color: var(--tg-theme-secondary-bg-color, white); /* Secondary Telegram BG or white */
+            border-radius: 15px; /* Rounded corners like @CryptoBot */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15); /* Soft shadow */
+            padding: 25px; /* Padding inside the box */
+            text-align: left; /* Left align text inside the box */
         }
-        #giveaway-info, #register-section {
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            padding: 15px;
-            background-color: white;
+
+        .giveaway-title {
+            font-size: 1.5em; /* Large title text */
+            font-weight: bold;
+            color: var(--tg-theme-accent-color, #333); /* Accent color or dark gray title */
+            margin-bottom: 15px;
+            text-align: center; /* Center align title within box */
+        }
+
+        .giveaway-prize-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Channel Buttons - Horizontal Layout */
+        .channel-buttons {
+            display: flex;
+            justify-content: center; /* Center buttons horizontally */
+            gap: 10px; /* Spacing between buttons */
+            margin-bottom: 20px;
+        }
+
+        .channel-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color, #5cb85c); /* Button color or default green */
+            color: var(--tg-theme-button-text-color, white); /* Button text color or white */
+            text-decoration: none; /* Remove underlines from links */
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 1em;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
+
+        .channel-button:hover {
+            opacity: 0.9; /* Slightly reduce opacity on hover for feedback */
+        }
+
+        .giveaway-end-date {
+            font-size: 1em;
+            color: #777; /* Gray color for end date */
+            margin-bottom: 20px;
+            text-align: center; /* Center align end date */
+        }
+
+        .giveaway-status-message {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center; /* Center align status messages */
+        }
+
+        .giveaway-status-message.finished {
+            color: #dc3545; /* Red for "Giveaway finished" */
+        }
+
+        .giveaway-status-message.initialization-error {
+            color: red; /* Red for initialization errors */
+        }
+        .giveaway-status-message.joining {
+            color: var(--tg-theme-link-color, #007bff); /* Link color or blue for "Joining..." */
+        }
+
+        /* Join Giveaway Button - Large and Prominent */
+        button#join-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: var(--tg-theme-button-text-color, white); /* Button text color or white */
+            background-color: var(--tg-theme-button-color, #5cb85c); /* Button color or default green */
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 10px; /* More rounded join button */
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold; /* Bold Join button text */
+            margin-top: 10px; /* Some top margin */
         }
-        button:hover {
-            background-color: #45a049;
+
+        button#join-button:hover {
+            background-color: #55b055; /* Slightly darker green on hover */
         }
-        /* Bouncing emoji animation */
-        .emoji {
-            font-size: 2em;
-            animation: bounce 1.5s infinite;
+
+        #congrats-popup {
+            display: none;
+            background-color: #e6ffe6;
+            color: #28a745;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #b3e0b3;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-align: center; /* Center text in congrats popup */
         }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-30px);
-            }
-            60% {
-                transform: translateY(-15px);
-            }
+
+
+        /* Loading Page - Identical to previous versions */
+        #loading-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(244, 244, 249, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #6c5ce7;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #loading-message {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        #content {
+            display: none; /* Hidden initially */
+            align-items: center;
+            flex-direction: column;
+        }
+
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>🎉 Welcome to the Giveaway Bot 🎉</h1>
-    </header>
-    <main>
-        <section id="register-section">
-            <h2>Join a Giveaway</h2>
-            <button id="join-button">Join Giveaway</button>
-            <div id="congrats-popup" style="display: none;">🎉 Congratulations! You have joined the giveaway successfully! 🎉</div>
-        </section>
-    </main>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="static/js/script.js"></script>
-    <script src="static/js/common.js"></script>
-    <script src="static/js/join_giveaway.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!localStorage.getItem('user_id')) {
-                window.location.href = 'index.html'; // Redirect to index.html if user_id is missing
-            } else {
-                // -- Your EXISTING add_channel.js code that was already here (inside the 'DOMContentLoaded' event listener) should go INSIDE this 'else' block --
-                const addChannelForm = document.getElementById('add_channel_form');
-        
-                addChannelForm.addEventListener('submit', async function(event) {
-                    event.preventDefault();
-        
-                    const usernameInput = document.getElementById('channel_username');
-                    const username = usernameInput.value;
-                    const userId = localStorage.getItem('user_id');  // Get user_id from localStorage
-        
-                    if (!username || !userId) {
-                        alert('Username and User ID are required.');
-                        return;
-                    }
-        
-                    try {
-                        const response = await fetch('https://backend-production-5459.up.railway.app/add_channel', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ username, user_id: userId })
-                        });
-                        const data = await response.json();
-        
-                        if (data.success) {
-                            document.getElementById('channelMessage').innerText = 'Channel added successfully!';
-                        } else {
-                            document.getElementById('channelMessage').innerText = 'Error adding channel: ' + data.message;
-                        }
-                    } catch (error) {
-                        console.error('Error adding channel:', error);
-                    }
-                });
-        
-            } // -- Closing brace for the 'else' block --
-        });
-        </script>
+
+<div id="loading-page">
+    <div class="spinner"></div>
+    <p id="loading-message">Loading Giveaway Details...</p>
+</div>
+
+<div id="content" class="container">
+    <div class="giveaway-box">
+        <h2 class="giveaway-title" id="giveaway-title"></h2>
+        <div class="giveaway-prize-description" id="giveaway-description"></div>
+        <div class="channel-buttons" id="channel-links">
+            </div>
+        <p class="giveaway-end-date" id="giveaway-end-date"></p>
+        <p class="giveaway-status-message initialization-error" id="initializationMessage"></p>
+        <p class="giveaway-status-message joining" id="joiningMessage" style="display: none;">Joining Giveaway...</p>
+        <p class="giveaway-status-message finished" id="giveawayFinishedMessage" style="display: none;">🎉 Giveaway finished! 🎉</p>
+
+        <button id="join-button">Join Giveaway</button>
+        <div id="congrats-popup" style="display: none;">🎉 Congratulations! You have joined the giveaway successfully! 🎉</div>
+    </div>
+</div>
+
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="static/js/join_giveaway.js"></script>
 </body>
 </html>
