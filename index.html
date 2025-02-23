@@ -1,112 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giveaway Bot Platform</title>
-  <script>
-    // Initialize Telegram WebApp and update theme variables
-    var tg = window.Telegram.WebApp;
-    tg.expand();
-
-    function applyTelegramTheme() {
-      // Update CSS variables using Telegram theme parameters or fallback defaults
-      document.documentElement.style.setProperty('--bg-color', tg.themeParams.bg_color || '#f8f9fa');
-      document.documentElement.style.setProperty('--text-color', tg.themeParams.text_color || '#343a40');
-      document.documentElement.style.setProperty('--hero-bg', tg.themeParams.secondary_bg_color || '#ffffff');
-      document.documentElement.style.setProperty('--primary-color', tg.themeParams.button_color || '#007bff');
-      document.documentElement.style.setProperty('--button-text-color', tg.themeParams.button_text_color || '#ffffff');
-      document.documentElement.style.setProperty('--footer-color', tg.themeParams.hint_color || '#adb5bd');
-    }
-    
-    applyTelegramTheme();
-    tg.onEvent('themeChanged', applyTelegramTheme);
-  </script>
-  <style>
-    :root {
-      --bg-color: #f8f9fa;
-      --text-color: #343a40;
-      --hero-bg: #ffffff;
-      --primary-color: #007bff;
-      --primary-hover: #0056b3;
-      --button-text-color: #ffffff;
-      --footer-color: #adb5bd;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg-color);
-      /* Optionally, you can add a subtle gradient:
-      background: linear-gradient(135deg, var(--bg-color), #e9ecef); */
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .hero-container {
-      padding: 50px;
-      background-color: var(--hero-bg);
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      width: 95%;
-      transition: background-color 0.3s ease;
-    }
-    h1 {
-      font-size: 2.8em;
-      margin-bottom: 15px;
-      font-weight: bold;
-      color: var(--primary-color);
-      transition: color 0.3s ease;
-    }
-    p.tagline {
-      font-size: 1.2em;
-      margin-bottom: 30px;
-      line-height: 1.7;
-      color: var(--text-color);
-      transition: color 0.3s ease;
-    }
-    .cta-button {
-      display: inline-block;
-      padding: 15px 40px;
-      font-size: 1.3em;
-      font-weight: 600;
-      text-decoration: none;
-      background-color: var(--primary-color);
-      color: var(--button-text-color);
-      border-radius: 10px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      animation: pulse 2s infinite alternate;
-    }
-    .cta-button:hover {
-      background-color: var(--primary-hover);
-    }
-    .minimal-footer {
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: var(--footer-color);
-      transition: color 0.3s ease;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Giveaway - Verify Bot Admin</title>
+    <style>
+        /* --- CSS - Keep the same styles from the previous visually corrected version --- */
+        /* (No CSS changes needed in this step, keep CSS from previous response) */
+        body { /* ... your CSS styles ... */ }
+        .container { /* ... your CSS styles ... */ }
+        h1 { /* ... your CSS styles ... */ }
+        h2 { /* ... your CSS styles ... */ }
+        .step-description { /* ... your CSS styles ... */ }
+        .form-group { /* ... your CSS styles ... */ }
+        .form-group label { /* ... your CSS styles ... */ }
+        .form-group input[type="text"] { /* ... your CSS styles ... */ }
+        button#verify-channel-button { /* ... your CSS styles ... */ }
+        #channel-verification-status { /* ... your CSS styles ... */ }
+        #loading-page { /* ... your CSS styles ... */ }
+        .spinner { /* ... your CSS styles ... */ }
+        #loading-message { /* ... your CSS styles ... */ }
+        #content { /* ... your CSS styles ... */ }
+        @media (min-width: 768px) { /* ... your CSS media query ... */ }
+    </style>
 </head>
 <body>
-  <div class="hero-container">
-    <h1>Effortless Telegram Giveaways</h1>
-    <p class="tagline">Launch beautiful, engaging giveaways to grow your Telegram community. Simple setup, powerful results.</p>
-    <a href="./create_giveaway.html" class="cta-button">Create Giveaway</a>
-  </div>
-  <footer class="minimal-footer">
-    &copy; 2024 Your Giveaway Platform. All rights reserved.
-  </footer>
+
+<div id="loading-page">
+    <div class="spinner"></div>
+    <p id="loading-message">Loading...</p>
+</div>
+
+<div id="content" class="container">
+    <h1>Create Your Giveaway</h1>
+
+    <div id="channel-list-container" style="display: none;">
+        </div>
+
+    <div id="step1-container"> <!- Step 1 Container -->
+        <h2>Step 1: Verify Bot Admin in Channel</h2>
+        <p class="step-description">To automate your giveaway, please add our bot <a href="https://t.me/giveaway_setota_bot" target="_blank">@giveaway_setota_bot</a> as an administrator to your Telegram channel. After adding, enter your channel username below to verify.</p>
+
+        <div class="form-group">
+            <label for="channel-username">Enter your Telegram Channel Username:</label>
+            <input type="text" id="channel-username" placeholder="@yourchannelusername">
+        </div>
+
+        <button id="verify-channel-button">Verify Channel</button>
+
+        <div id="channel-verification-status" style="display: none;"></div>
+    </div>
+
+    <div id="step2-container" style="display: none;">
+        </div>
+
+</div>
+
+<script src="static/js/create_giveaway.js"></script>
 </body>
 </html>
