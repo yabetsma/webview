@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingPageElement = document.getElementById('loading-page');
     const loadingMessageElement = document.getElementById('loading-message');
 
-
     const backendBaseUrl = 'https://backend-production-5459.up.railway.app'; // Your backend URL
+    const platformBotUsername = "@giveaway_setota_bot"; // **Hardcoded Platform Bot Username**
 
 
     function showContent() {
@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    async function verifyChannelOwnership(channelUsername) {
-        showLoading("Verifying Channel...");
+    async function verifyGiveawayBotAdmin(channelUsername) { // Corrected function name
+        showLoading("Verifying Bot Admin Status..."); // Updated loading message
         channelVerificationStatus.style.display = 'none'; // Hide previous status
 
         if (!channelUsername) {
@@ -42,12 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(`${backendBaseUrl}/verify_channel_admin`, { // Backend endpoint to verify channel admin
+            const response = await fetch(`${backendBaseUrl}/verify_giveaway_bot_admin`, { // Corrected backend endpoint URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ channel_username: channelUsername }) // Send channel username to backend
+                body: JSON.stringify({ channel_username: channelUsername, bot_username: platformBotUsername }) // Send channel username AND platform bot username
             });
 
             if (!response.ok) {
@@ -56,37 +56,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             if (data.success) {
-                displayVerificationStatus("Channel verified successfully!", true);
+                displayVerificationStatus("Giveaway bot is admin in the channel! Verification successful.", true); // Corrected success message
                 // ** NEXT STEP:  Enable the rest of the giveaway form here **
                 // For now, just log success
-                console.log("Channel verification successful:", data);
+                console.log("Giveaway bot admin verification successful:", data);
             } else {
-                displayVerificationStatus(data.message || "Channel verification failed. Please check username and bot admin status.", false);
-                console.error("Channel verification failed:", data.message);
+                displayVerificationStatus(data.message || `Giveaway bot @giveaway_setota_bot is not an admin in the channel. Please add the bot as admin with 'Send messages' permission and try again.`, false); // Corrected error message, now includes PLATFORM BOT USERNAME
+                console.error("Giveaway bot admin verification failed:", data.message);
             }
 
         } catch (error) {
-            displayVerificationStatus("Error verifying channel. Please try again later.", false);
-            console.error("Error during channel verification:", error);
+            displayVerificationStatus("Error verifying bot admin status. Please try again later.", false); // Corrected error message
+            console.error("Error during giveaway bot admin verification:", error);
         } finally {
-            showContent(); // Show content after verification attempt (success or failure)
+            showContent(); // Show content after verification attempt
         }
     }
 
 
     function displayVerificationStatus(message, isSuccess) {
         channelVerificationStatus.textContent = message;
-        channelVerificationStatus.className = 'giveaway-status-message channel-verification'; // Reset class
+        channelVerificationStatus.className = 'giveaway-status-message channel-verification';
         channelVerificationStatus.classList.add(isSuccess ? 'success' : 'error');
-        channelVerificationStatus.style.display = 'block'; // Show status message
+        channelVerificationStatus.style.display = 'block';
     }
 
 
     verifyChannelButton.addEventListener('click', function() {
         const channelUsername = channelUsernameInput.value.trim();
-        verifyChannelOwnership(channelUsername);
+        verifyGiveawayBotAdmin(channelUsername); // Call the corrected verification function
     });
 
-    showContent(); // Initially show content (loading page will handle initial loading if needed later)
+    showContent();
 
 });
