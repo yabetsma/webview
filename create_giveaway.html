@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Giveaway - Verify Bot Admin</title>
     <style>
-        /* --- CSS - Keep the same styles from the previous visually corrected version --- */
+        /* --- CSS - Full Code - Mobile-First and Visually Corrected --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -220,22 +220,32 @@
 
 <div id="loading-page">
     <div class="spinner"></div>
-    <p id="loading-message">Verifying Bot Admin Status...</p>
+    <p id="loading-message">Loading...</p>
 </div>
 
 <div id="content" class="container">
     <h1>Create Your Giveaway</h1>
-    <h2>Step 1: Verify Bot Admin in Channel</h2>
-    <p class="step-description">To automate your giveaway, please add our bot <a href="https://t.me/giveaway_setota_bot" target="_blank">@giveaway_setota_bot</a> as an administrator to your Telegram channel. After adding, enter your channel username below to verify.</p>
 
-    <div class="form-group">
-        <label for="channel-username">Enter your Telegram Channel Username:</label>
-        <input type="text" id="channel-username" placeholder="@yourchannelusername">
+    <div id="channel-list-container" style="display: none;">
+        </div>
+
+    <div id="step1-container"> <!- Step 1 Container -->
+        <h2>Step 1: Verify Bot Admin in Channel</h2>
+        <p class="step-description">To automate your giveaway, please add our bot <a href="https://t.me/giveaway_setota_bot" target="_blank">@giveaway_setota_bot</a> as an administrator to your Telegram channel. After adding, enter your channel username below to verify.</p>
+
+        <div class="form-group">
+            <label for="channel-username">Enter your Telegram Channel Username:</label>
+            <input type="text" id="channel-username" placeholder="@yourchannelusername">
+        </div>
+
+        <button id="verify-channel-button">Verify Channel</button>
+
+        <div id="channel-verification-status" style="display: none;"></div>
     </div>
 
-    <button id="verify-channel-button">Verify Channel</button>
+    <div id="step2-container" style="display: none;">
+        </div>
 
-    <div id="channel-verification-status" style="display: none;"></div>
 </div>
 
 <script src="static/js/create_giveaway.js"></script>
