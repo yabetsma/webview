@@ -1,4 +1,3 @@
-// static/js/create_giveaway.js
 document.addEventListener('DOMContentLoaded', function() {
     const createGiveawayForm = document.getElementById('create_giveaway_form');
     const channelCheckboxesContainer = document.getElementById('channel_checkboxes');
@@ -127,19 +126,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            const requestBody = JSON.stringify({ // Store the JSON body in a variable
+                channel_ids: channelIds,
+                user_id: userId,
+                name: name,
+                prize_amount: prizeAmount,
+                participants_count: participantsCount,
+                end_date: endDate
+            });
+
+            console.log("Request Body for create_giveaway:", requestBody); // **Log the request body to console**
+
             const response = await fetch(`${backendBaseUrl}/create_giveaway`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    channel_ids: channelIds,
-                    user_id: userId,
-                    name: name,
-                    prize_amount: prizeAmount,
-                    participants_count: participantsCount,
-                    end_date: endDate
-                })
+                body: requestBody // Use the requestBody variable here
             });
 
             if (!response.ok) {
