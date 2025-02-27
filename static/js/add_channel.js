@@ -1,4 +1,3 @@
-// add_channel.js
 document.addEventListener('DOMContentLoaded', function() {
     const addChannelForm = document.getElementById('add_channel_form');
 
@@ -20,7 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, user_id: userId })
+                body: JSON.stringify({
+                    usernames: [username], // **Send username as a list**
+                    chat_ids: [],         // **Send chat_ids as an empty list (or null)**
+                    user_id: userId
+                })
             });
             const data = await response.json();
 
