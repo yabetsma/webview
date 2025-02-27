@@ -190,26 +190,37 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchUserChannels() {
         showLoading("Loading Channels...");
         try {
-            // **--- Get user_id from Telegram Web App initData ---**
-            const webApp = Telegram.WebApp; // Assuming Telegram Web App API is available
-            const userId = webApp.initDataUnsafe?.user?.id; // Access user ID from initData
+            const webApp = Telegram.WebApp;
+            const userId = webApp.initDataUnsafe?.user?.id;
     
             if (!userId) {
                 displayVerificationStatus("Could not retrieve user ID from Telegram.", false);
                 showStep1UI();
                 console.error("User ID not found in Telegram Web App initData");
-                return; // Stop fetching channels if no user ID
+                return;
             }
     
-            const response = await fetch(`${backendBaseUrl}/get_user_channels?user_id=${userId}`); // **Append user_id as a query parameter**
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            const response = await fetch(`${backendBaseUrl}/get_user_channels?user_id=${userId}`);
+    
+            if (!response.ok) { // Check for non-OK responses (including 404 and other errors)
+                if (response.status === 404) {
+                    // **Handle 404 specifically: No channels found - NOT an error in this case**
+                    console.log("No channels found for user (404). Proceeding to Step 1.");
+                    displayExistingChannels([]); // Treat as empty channel list
+                    return; // Exit function, displayExistingChannels([]) will handle UI update
+                } else {
+                    // **Handle other non-OK statuses as errors (e.g., 500, 503, etc.)**
+                    throw new Error(`HTTP error! status: ${response.status}`); // For other errors, throw error as before
+                }
             }
+    
             const data = await response.json();
             displayExistingChannels(data.channels);
+    
         } catch (error) {
+            // **Catch block should still handle *real* errors (like network issues, backend 500s, etc.)**
             console.error("Error fetching user channels:", error);
-            displayVerificationStatus("Error loading channels. Please try again later.", false);
+            displayVerificationStatus("Error loading channels. Please try again later.", false); // Keep generic error message for *actual* errors
             showStep1UI();
         } finally {
             showContent();
