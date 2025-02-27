@@ -1,15 +1,16 @@
+// static/js/create_giveaway.js
 document.addEventListener('DOMContentLoaded', function() {
     const createGiveawayForm = document.getElementById('create_giveaway_form');
-    const channelCheckboxesContainer = document.getElementById('channel_checkboxes'); // Get checkbox container
+    const channelCheckboxesContainer = document.getElementById('channel_checkboxes');
     const giveawayMessageElement = document.getElementById('giveawayMessage');
     const contentElement = document.getElementById('content');
     const loadingPageElement = document.getElementById('loading-page');
     const loadingMessageElement = document.getElementById('loading-message');
 
-    const backendBaseUrl = commonJS.getBackendBaseUrl(); // Use backend URL from common.js
+    const backendBaseUrl = commonJS.getBackendBaseUrl();
     const telegramWebApp = Telegram.WebApp;
     telegramWebApp.ready();
-    const maxChannelsToSelect = 3; // Maximum number of channels selectable
+    const maxChannelsToSelect = 3;
 
     function showContent() {
         if (loadingPageElement) loadingPageElement.style.display = 'none';
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchUserChannels() {
         showLoading("Loading Channels...");
         try {
-            const userId = localStorage.getItem('user_id'); // Get user_id from localStorage
+            const userId = localStorage.getItem('user_id');
 
             if (!userId) {
                 displayGiveawayMessage("User ID not found. Please initialize user again.", false);
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 if (response.status === 404) {
                     console.log("No channels found for user (404).");
-                    populateChannelCheckboxes([]); // Populate with empty list
+                    populateChannelCheckboxes([]);
                 } else {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -61,14 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateChannelCheckboxes(channels) {
-        channelCheckboxesContainer.innerHTML = ''; // Clear existing checkboxes
+        channelCheckboxesContainer.innerHTML = '';
         if (channels && channels.length > 0) {
             channels.forEach(channel => {
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.id = `channel-${channel.id}`;
-                checkbox.value = channel.id; // Channel ID as value
-                checkbox.name = 'channels'; // Important: Use 'channels' as name for all checkboxes
+                checkbox.value = channel.id;
+                checkbox.name = 'channels';
                 const label = document.createElement('label');
                 label.htmlFor = `channel-${channel.id}`;
                 label.textContent = channel.username || `Chat ID: ${channel.chat_id}`;
@@ -77,10 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 channelDiv.appendChild(label);
                 channelCheckboxesContainer.appendChild(channelDiv);
 
-                checkbox.addEventListener('change', function() { // Enforce max selection
+                checkbox.addEventListener('change', function() {
                     const checkedChannels = document.querySelectorAll('input[name="channels"]:checked');
                     if (checkedChannels.length > maxChannelsToSelect) {
-                        checkbox.checked = false; // Uncheck the current checkbox
+                        checkbox.checked = false;
                         displayGiveawayMessage(`You can select maximum ${maxChannelsToSelect} channels.`, false);
                     }
                 });
@@ -92,13 +93,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     createGiveawayForm.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         const selectedChannelElements = document.querySelectorAll('input[name="channels"]:checked');
-        const channelIds = Array.from(selectedChannelElements).map(el => el.value); // Get selected channel IDs
+        const channelIds = Array.from(selectedChannelElements).map(el => el.value);
         const name = document.getElementById('giveaway_name').value;
-        const prizeAmount = document.getElementById('prize_amount').value;
-        const participantsCount = document.getElementById('participants_count').value;
+        const prizeAmount = parseFloat(document.getElementById('prize_amount').value);
+        const participantsCount = parseInt(document.getElementById('participants_count').value, 10);
         const endDate = document.getElementById('end_date').value;
 
         if (channelIds.length === 0) {
@@ -106,20 +107,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         if (channelIds.length > maxChannelsToSelect) {
-            displayGiveawayMessage(`Please select up to ${maxChannelsToSelect} channels.`, false); // Redundant check, but good to have
+            displayGiveawayMessage(`Please select up to ${maxChannelsToSelect} channels.`, false);
             return;
         }
-        if (!name || !prizeAmount || !participantsCount || !endDate) {
-            displayGiveawayMessage("Please fill in all fields.", false);
+        if (!name || isNaN(prizeAmount) || isNaN(participantsCount) || !endDate) {
+            displayGiveawayMessage("Please fill in all fields with valid data.", false);
             return;
         }
 
 
         showLoading("Creating Giveaway...");
-        displayGiveawayMessage('', false); // Clear previous messages
+        displayGiveawayMessage('', false);
 
         try {
-            const userId = localStorage.getItem('user_id'); // Get user_id from localStorage
+            const userId = localStorage.getItem('user_id');
             if (!userId) {
                 displayGiveawayMessage("User ID not found. Please initialize user again.", false);
                 showContent();
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    channel_ids: channelIds, // Send an array of channel IDs
+                    channel_ids: channelIds,
                     user_id: userId,
                     name: name,
                     prize_amount: prizeAmount,
@@ -148,8 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.success) {
                 displayGiveawayMessage("Giveaway created successfully!", true);
-                createGiveawayForm.reset(); // Clear the form
-                // Clear checkboxes after successful submission (optional, but might be good UX)
+                createGiveawayForm.reset();
                 const checkboxes = document.querySelectorAll('input[name="channels"]:checked');
                 checkboxes.forEach(checkbox => checkbox.checked = false);
             } else {
