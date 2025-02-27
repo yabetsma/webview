@@ -1,67 +1,93 @@
 document.addEventListener('DOMContentLoaded', function() {
     const initializationMessageElement = document.getElementById('initializationMessage');
-    const loadingPageElement = document.getElementById('loading-page');
-    const contentElement = document.getElementById('content');
+    const contentElement = document.getElementById('content'); // Get content element
+    const loadingPageElement = document.getElementById('loading-page'); // Get loading page
+    const loadingMessageElement = document.getElementById('loading-message'); // Get loading message element
 
-    // --- Initialize Telegram Web App ---
     const telegramWebApp = Telegram.WebApp;
-    telegramWebApp.ready(); // Signal that the Web App is ready
+    const initData = telegramWebApp.initDataUnsafe;
+    const userId = initData?.user?.id;
+    const user = initData?.user;
+    const backendBaseUrl = 'https://backend-production-5459.up.railway.app';
 
-    // --- Get User Data from Telegram Web App ---
-    const userId = telegramWebApp.initDataUnsafe?.user?.id;
-    const firstName = telegramWebApp.initDataUnsafe?.user?.first_name;
-    const lastName = telegramWebApp.initDataUnsafe?.user?.last_name;
-    const username = telegramWebApp.initDataUnsafe?.user?.username;
-
-    if (!userId) {
-        // Handle case where user ID is not available (e.g., outside Telegram Web App)
-        initializationMessageElement.textContent = 'Could not retrieve Telegram user ID.';
-        hideLoadingShowContent(); // Still show content, but with error message
-        return; // Stop further initialization
+    function displayInitializationMessage(message) {
+        if (initializationMessageElement) {
+            initializationMessageElement.textContent = message;
+        } else {
+            console.error("Initialization message element not found!");
+        }
     }
 
-    // --- Send User Data to Backend for Initialization ---
-    const backendBaseUrl = commonJS.getBackendBaseUrl(); // Assuming common.js has this function
-    const initUserUrl = `${backendBaseUrl}/init_user`;
+    // Function to show the main content and hide loading page
+    function showContent() {
+        if (loadingPageElement) {
+            loadingPageElement.style.display = 'none'; // Hide loading page
+        }
+        if (contentElement) {
+            contentElement.style.display = 'flex'; // Show main content (using flex to keep centering)
+        }
+    }
 
-    fetch(initUserUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            telegram_id: userId,
-            first_name: firstName,
-            last_name: lastName,
-            username: username
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    // Function to show loading page and set message
+    function showLoading(message) {
+        if (loadingPageElement) {
+            loadingPageElement.style.display = 'flex'; // Show loading page
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            console.log('User initialization successful:', data);
-            localStorage.setItem('user_id', data.user_id); // Store user_id in localStorage
-            initializationMessageElement.textContent = 'Initialization successful!';
-        } else {
-            console.error('User initialization failed:', data);
-            initializationMessageElement.textContent = 'Initialization failed: ' + data.message;
+        if (loadingMessageElement && message) {
+            loadingMessageElement.textContent = message; // Update loading message
         }
-    })
-    .catch(error => {
-        console.error('Error during user initialization:', error);
-        initializationMessageElement.textContent = 'Error during initialization: ' + error.message || 'Unknown error.';
-    })
-    .finally(() => {
-        hideLoadingShowContent(); // Call this in finally block to always hide loading
+        if (contentElement) {
+            contentElement.style.display = 'none'; // Hide main content
+        }
+    }
+
+
+    async function initUser() {
+        showLoading("Initializing user..."); // Show loading page with message
+        if (!user || !user.id) {
+            displayInitializationMessage("Error: User information not available. Please try again from Telegram.");
+            console.error("User information not available from Telegram Web App.");
+            return false;
+        }
+
+        try {
+            const response = await fetch(`${backendBaseUrl}/init_user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ telegram_id: user.id, first_name: user.first_name, last_name: user.last_name, username: user.username })
+            });
+
+            if (!response.ok) {
+                displayInitializationMessage(`Initialization failed. HTTP error! status: ${response.status}`);
+                console.error('HTTP error!', response);
+                return false;
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem('user_id', data.user_id);
+                console.log('User initialized successfully in index:', data);
+                // displayInitializationMessage("User initialized successfully."); // No need for text message now
+                showContent(); // Show main content after success
+                return true;
+            } else {
+                displayInitializationMessage(`Initialization failed: ${data.message}`);
+                console.error('Initialization failed:', data.message);
+                return false;
+            }
+
+        } catch (error) {
+            displayInitializationMessage("Initialization error. Please check your connection and try again.");
+            console.error('Error initializing user:', error);
+            return false;
+        }
+    }
+
+    initUser().catch(error => {
+        displayInitializationMessage("Initialization failed unexpectedly.");
+        console.error("Unexpected error during initialization:", error);
     });
 
-    function hideLoadingShowContent() {
-        loadingPageElement.style.display = 'none';
-        contentElement.style.display = 'flex'; // Or 'block' depending on your CSS 'content' rules
-    }
 });
