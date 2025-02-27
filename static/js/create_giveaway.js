@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingPageElement = document.getElementById('loading-page');
     const loadingMessageElement = document.getElementById('loading-message');
 
-    const backendBaseUrl = commonJS.getBackendBaseUrl(); // Use backend URL from common.js
+    const backendBaseUrl = common.getBackendBaseUrl(); // Use backend URL from common.js
     const telegramWebApp = Telegram.WebApp;
     telegramWebApp.ready();
 
