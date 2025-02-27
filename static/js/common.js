@@ -3,7 +3,7 @@
 const commonJS = {  // **Define the `commonJS` object here!**
     getBackendBaseUrl: function() {
         // Replace with your actual backend base URL (e.g., Railway URL)
-        return 'YOUR_BACKEND_BASE_URL_HERE'; // **IMPORTANT: Replace this placeholder!**
+        return 'https://backend-production-5459.up.railway.app'; // **IMPORTANT: Replace this placeholder!**
     },
 
     // **Move your existing functions *inside* the `commonJS` object:**
