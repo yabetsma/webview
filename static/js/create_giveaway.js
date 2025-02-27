@@ -190,16 +190,27 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchUserChannels() {
         showLoading("Loading Channels...");
         try {
-            const response = await fetch(`${backendBaseUrl}/get_user_channels`); // New backend endpoint to get user channels
+            // **--- Get user_id from Telegram Web App initData ---**
+            const webApp = Telegram.WebApp; // Assuming Telegram Web App API is available
+            const userId = webApp.initDataUnsafe?.user?.id; // Access user ID from initData
+    
+            if (!userId) {
+                displayVerificationStatus("Could not retrieve user ID from Telegram.", false);
+                showStep1UI();
+                console.error("User ID not found in Telegram Web App initData");
+                return; // Stop fetching channels if no user ID
+            }
+    
+            const response = await fetch(`${backendBaseUrl}/get_user_channels?user_id=${userId}`); // **Append user_id as a query parameter**
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            displayExistingChannels(data.channels); // Assuming backend returns { channels: [...] }
+            displayExistingChannels(data.channels);
         } catch (error) {
             console.error("Error fetching user channels:", error);
-            displayVerificationStatus("Error loading channels. Please try again later.", false); // Optional error message
-            showStep1UI(); // Fallback to Step 1 if channel loading fails
+            displayVerificationStatus("Error loading channels. Please try again later.", false);
+            showStep1UI();
         } finally {
             showContent();
         }
